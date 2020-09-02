@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"strings"
 )
 
 func main() {
@@ -15,7 +14,19 @@ func main() {
 		fmt.Println("File reading error", err)
 		return
 	}
-	tab := strings.Fields(string(data))
-	fmt.Println("tab:", tab)
-	// fmt.Println("Contents of file:", string(data))
+	for charPos := 0; charPos < len(data); charPos++ {
+		fmt.Println(string(data[charPos]))
+		for _, op := range operators {
+			if op == string(data[charPos]) {
+				fmt.Println("operator")
+			}
+		}
+
+		for _, op := range ident {
+			if op == string(data[charPos]) {
+				fmt.Println("ident")
+			}
+		}
+	}
+
 }
