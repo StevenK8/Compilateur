@@ -49,63 +49,28 @@ func lexer(data []byte) []token {
 
 		currentChar := string(data[charPos])
 
-		matched, err := regexp.MatchString(`[a-zA-Z]`, currentChar)
-		if err != nil {
-			println(err)
-		}
+		tokenTab, isLetter, currentWord = checkMatch(`[a-zA-Z]`, isLetter, currentChar, currentWord, charPos, tokenTab)
+		tokenTab, isNumber, currentWord = checkMatch(`[0-9]`, isNumber, currentChar, currentWord, charPos, tokenTab)
+		tokenTab, isOperator, currentWord = checkMatch(`[(+*;=)]`, isOperator, currentChar, currentWord, charPos, tokenTab)
 
-		if matched && (isLetter || len(currentWord) == 0) {
-			currentWord += currentChar
-			isLetter = true
-		} else if isLetter && !matched {
-			tokenTab = append(tokenTab, token{"lettre", currentWord, 0, charPos})
-			currentWord = ""
-			isLetter = false
-		}
-
-		matched, err = regexp.MatchString(`[0-9]`, currentChar)
-		if err != nil {
-			println(err)
-		}
-
-		if matched && (isNumber || len(currentWord) == 0) {
-			currentWord += currentChar
-			isLetter = false
-			isNumber = true
-			isOperator = false
-		} else if isNumber && !matched {
-			tokenTab = append(tokenTab, token{"nombre", currentWord, 0, charPos})
-			currentWord = ""
-			isNumber = false
-		}
-
-		matched, err = regexp.MatchString(`[(+*;=]`, currentChar)
-		if err != nil {
-			println(err)
-		}
-
-		if matched && (isOperator || len(currentWord) == 0) {
-			currentWord += currentChar
-			isLetter = false
-			isNumber = false
-			isOperator = true
-		} else if isOperator && !matched {
-			tokenTab = append(tokenTab, token{"ope", currentWord, 0, charPos})
-			currentWord = ""
-			isOperator = false
-		}
-
-		// fmt.Println(currentChar)
 	}
 	return tokenTab
 }
 
-func isFirstcurrentChar(char string, word string) bool {
-	if char == string(word[0]) {
-		return true
-	} else {
-		return false
+func checkMatch(regex string, isType bool, currentChar string, currentWord string, charPos int, tokenTab []token) ([]token, bool, string) {
+	matched, err := regexp.MatchString(regex, currentChar)
+	if err != nil {
+		println(err)
 	}
+	if matched && (isType || len(currentWord) == 0) {
+		currentWord += currentChar
+		isType = true
+	} else if isType && !matched {
+		tokenTab = append(tokenTab, token{"operateur", currentWord, 0, charPos})
+		currentWord = ""
+		isType = false
+	}
+	return tokenTab, isType, currentWord
 }
 
 func contains(arr []string, str string) bool {
