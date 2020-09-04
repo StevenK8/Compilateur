@@ -15,8 +15,8 @@ func TestOperator(t *testing.T) {
 }
 func TestGetOperator(t *testing.T) {
 	texte := "3 += 2"
-	dataType, longueur := get_operator([]byte(texte), 4)
-	if dataType != Equal_add {
+	dataType, longueur := getOperator([]byte(texte), 4)
+	if dataType != equalAdd {
 		t.Errorf("Erreur type : " + string(dataType))
 	}
 	if longueur != 2 {

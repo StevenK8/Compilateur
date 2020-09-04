@@ -7,29 +7,29 @@ import (
 	"strconv"
 )
 
-type TokenType string
+type tokenType string
 
 const (
-	Operator            TokenType = "Operator"
-	Equal_add           TokenType = "+="
-	Equal_sub           TokenType = "-="
-	Equal_mult          TokenType = "*="
-	Equal_increment     TokenType = "++"
-	Equal_pow           TokenType = "**"
-	Equal_Equal         TokenType = "=="
-	Equal               TokenType = "="
-	Operator_plus       TokenType = "+"
-	Operator_minus      TokenType = "-"
-	Operator_mult       TokenType = "*"
-	Parenthese_ouvrante TokenType = "("
-	Parenthese_fermante TokenType = ")"
-	Point_virgule       TokenType = ";"
-	Constant            TokenType = "Number"
-	Word                TokenType = "Word"
+	operator           tokenType = "Operator"
+	equalAdd           tokenType = "+="
+	equalSub           tokenType = "-="
+	equalMult          tokenType = "*="
+	equalIncrement     tokenType = "++"
+	equalPow           tokenType = "**"
+	equalequal         tokenType = "=="
+	equal              tokenType = "="
+	operatorPlus       tokenType = "+"
+	operatorMinus      tokenType = "-"
+	operatorMult       tokenType = "*"
+	parentheseOuvrante tokenType = "("
+	parentheseFermante tokenType = ")"
+	pointVirgule       tokenType = ";"
+	constant           tokenType = "Number"
+	word               tokenType = "Word"
 )
 
 type token struct {
-	dataType     TokenType
+	dataType     tokenType
 	valeurString string
 	valeurInt    int
 	nbLigne      int
@@ -52,12 +52,8 @@ func main() {
 
 func lexer(data []byte) []token {
 
-	// var isLetter bool
-	// var isOperator bool
-	// var isNumber bool
-	// var currentWord string
 	var tokenTab []token
-	var numOfLine int = 0
+	var numOfLine int
 
 	for charPos := 0; charPos < len(data); charPos++ {
 
@@ -71,23 +67,16 @@ func lexer(data []byte) []token {
 			numOfLine++
 		}
 
-		//Creation ou continuté du mot
-
-		//Verifier la fin du mot avant de tester la continuité
-		// tokenTab, isLetter, currentWord = checkMatch(`[a-zA-Z]`, isLetter, currentChar, currentWord, numOfLine, tokenTab)
-		// tokenTab, isNumber, currentWord = checkMatch(`[0-9]`, isNumber, currentChar, currentWord, numOfLine, tokenTab)
-		// tokenTab, isOperator, currentWord = checkMatch(`[(+*;=)]`, isOperator, currentChar, currentWord, numOfLine, tokenTab)
-
 		if checkMatchChar("[(+*;=)]", currentChar) {
-			dataType, longueur := get_operator(data, charPos)
+			dataType, longueur := getOperator(data, charPos)
 			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), 0, charPos})
 			charPos += longueur
 		} else if checkMatchChar("[a-zA-Z]", currentChar) {
-			dataType, longueur := get_ident(data, charPos)
+			dataType, longueur := getIdent(data, charPos)
 			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), 0, charPos})
 			charPos += longueur
 		} else if checkMatchChar("[0-9]", currentChar) {
-			dataType, longueur := get_number(data, charPos)
+			dataType, longueur := getNumber(data, charPos)
 			i, err := strconv.Atoi(string(data[charPos : charPos+longueur+1]))
 			if err != nil {
 				println(err)
@@ -109,83 +98,59 @@ func checkMatchChar(regex string, char string) bool {
 	return matched
 }
 
-func checkMatch(regex string, isType bool, currentChar string, currentWord string, charPos int, tokenTab []token) ([]token, bool, string) {
-	matched, err := regexp.MatchString(regex, currentChar)
-	if err != nil {
-		println(err)
-	}
-	//matchedCurrentWord, err := regexp.MatchString("^([a-zA-Z]|[^ ])*$", currentWord)
-	// println("Current word : ", currentWord, " - ", matchedCurrentWord)
-	if matched && (isType || len(currentWord) == 0) {
-		currentWord += currentChar
-		isType = true
-	} else if isType && !matched {
-		// tokenTab = append(tokenTab, token{"operateur", currentWord, 0, charPos})
-		currentWord = ""
-		isType = false
-	}
-	//  else if matched && !isType {
-	// 	tokenTab = append(tokenTab, token{"", currentWord, 0, charPos})
-	// 	currentWord = currentChar
-	// 	isType = true
-	// 	//Et l'autre qui etait en cours ?
-	// }
-	return tokenTab, isType, currentWord
-}
-
-func get_operator(data []byte, charPos int) (TokenType, int) {
-	var dataType TokenType
+func getOperator(data []byte, charPos int) (tokenType, int) {
+	var dataType tokenType
 	longueur := 0
 	switch string(data[charPos]) {
 	case "+":
-		dataType = Operator_plus
+		dataType = operatorPlus
 		if string(data[charPos+1]) == "=" {
 			longueur++
-			dataType = Equal_add
+			dataType = equalAdd
 		} else if string(data[charPos+1]) == "+" {
 			longueur++
-			dataType = Equal_increment
+			dataType = equalIncrement
 		}
 		break
 	case "-":
-		dataType = Operator_minus
+		dataType = operatorMinus
 		if string(data[charPos+1]) == "=" {
 			longueur++
-			dataType = Equal_sub
+			dataType = equalSub
 		}
 		break
 	case "*":
-		dataType = Operator_mult
+		dataType = operatorMult
 		if string(data[charPos+1]) == "=" {
 			longueur++
-			dataType = Equal_mult
+			dataType = equalMult
 		} else if string(data[charPos+1]) == "*" {
 			longueur++
-			dataType = Equal_pow
+			dataType = equalPow
 		}
 		break
 	case "=":
-		dataType = Equal
+		dataType = equal
 		if string(data[charPos+1]) == "=" {
 			longueur++
-			dataType = Equal_Equal
+			dataType = equalequal
 		}
 		break
 	case "(":
-		dataType = Parenthese_ouvrante
+		dataType = parentheseOuvrante
 		break
 	case ")":
-		dataType = Parenthese_fermante
+		dataType = parentheseFermante
 		break
 	case ";":
-		dataType = Point_virgule
+		dataType = pointVirgule
 		break
 	}
 	return dataType, longueur
 }
 
-func get_ident(data []byte, charPos int) (TokenType, int) {
-	dataType := Word
+func getIdent(data []byte, charPos int) (tokenType, int) {
+	dataType := word
 	var longueur int
 
 	for longueur = 0; charPos < len(data); charPos++ {
@@ -198,8 +163,8 @@ func get_ident(data []byte, charPos int) (TokenType, int) {
 	return dataType, longueur
 }
 
-func get_number(data []byte, charPos int) (TokenType, int) {
-	dataType := Constant
+func getNumber(data []byte, charPos int) (tokenType, int) {
+	dataType := constant
 	var longueur int
 
 	for longueur = 0; charPos < len(data); charPos++ {
