@@ -17,13 +17,13 @@ const (
 	equalIncrement     tokenType = "++"
 	equalPow           tokenType = "**"
 	equalequal         tokenType = "=="
-	equal              tokenType = "="
-	operatorPlus       tokenType = "+"
-	operatorMinus      tokenType = "-"
-	operatorMult       tokenType = "*"
-	parentheseOuvrante tokenType = "("
-	parentheseFermante tokenType = ")"
-	pointVirgule       tokenType = ";"
+	equal              tokenType = "Equal"
+	operatorPlus       tokenType = "Add"
+	operatorMinus      tokenType = "Sub"
+	operatorMult       tokenType = "Mult"
+	parentheseOuvrante tokenType = "Open_Paren"
+	parentheseFermante tokenType = "Close_Paren"
+	pointVirgule       tokenType = "Semicolon"
 	constant           tokenType = "Number"
 	word               tokenType = "Word"
 )
@@ -45,7 +45,7 @@ func main() {
 
 	tokenTab := lexer(data)
 	for _, a := range tokenTab {
-		println(strconv.Itoa(a.nbLigne) + " \t[" + string(a.valeurString) + "]")
+		println(strconv.Itoa(a.nbLigne) + " \t[" + string(a.valeurString) + "]\t" + string(a.dataType))
 	}
 
 }
