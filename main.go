@@ -53,7 +53,7 @@ func main() {
 func lexer(data []byte) []token {
 
 	var tokenTab []token
-	var numOfLine int
+	numOfLine := 1
 
 	for charPos := 0; charPos < len(data); charPos++ {
 
@@ -69,11 +69,11 @@ func lexer(data []byte) []token {
 
 		if checkMatchChar("[(+*;=)]", currentChar) {
 			dataType, longueur := getOperator(data, charPos)
-			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), 0, charPos})
+			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), 0, numOfLine})
 			charPos += longueur
 		} else if checkMatchChar("[a-zA-Z]", currentChar) {
 			dataType, longueur := getIdent(data, charPos)
-			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), 0, charPos})
+			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), 0, numOfLine})
 			charPos += longueur
 		} else if checkMatchChar("[0-9]", currentChar) {
 			dataType, longueur := getNumber(data, charPos)
@@ -81,7 +81,7 @@ func lexer(data []byte) []token {
 			if err != nil {
 				println(err)
 			}
-			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), i, charPos})
+			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), i, numOfLine})
 			charPos += longueur
 		}
 
