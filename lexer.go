@@ -89,37 +89,49 @@ func getOperator(data []byte, charPos int) (tokenType, int) {
 	switch string(data[charPos]) {
 	case "+":
 		dataType = operatorPlus
-		if string(data[charPos+1]) == "=" {
-			longueur++
-			dataType = equalAdd
-		} else if string(data[charPos+1]) == "+" {
-			longueur++
-			dataType = equalIncrement
+		if charPos < len(data)-1 {
+			if string(data[charPos+1]) == "=" {
+				longueur++
+				dataType = equalAdd
+			} else if string(data[charPos+1]) == "+" {
+				longueur++
+				dataType = equalIncrement
+			}
 		}
+
 		break
 	case "-":
 		dataType = operatorMinus
-		if string(data[charPos+1]) == "=" {
-			longueur++
-			dataType = equalSub
+		if charPos < len(data)-1 {
+			if string(data[charPos+1]) == "=" {
+				longueur++
+				dataType = equalSub
+			}
 		}
+
 		break
 	case "*":
 		dataType = operatorMult
-		if string(data[charPos+1]) == "=" {
-			longueur++
-			dataType = equalMult
-		} else if string(data[charPos+1]) == "*" {
-			longueur++
-			dataType = equalPow
+		if charPos < len(data)-1 {
+			if string(data[charPos+1]) == "=" {
+				longueur++
+				dataType = equalMult
+			} else if string(data[charPos+1]) == "*" {
+				longueur++
+				dataType = equalPow
+			}
 		}
+
 		break
 	case "=":
 		dataType = equal
-		if string(data[charPos+1]) == "=" {
-			longueur++
-			dataType = equalequal
+		if charPos < len(data)-1 {
+			if string(data[charPos+1]) == "=" {
+				longueur++
+				dataType = equalequal
+			}
 		}
+
 		break
 	case "(":
 		dataType = parentheseOuvrante
@@ -138,10 +150,10 @@ func getIdent(data []byte, charPos int) (tokenType, int) {
 	dataType := word
 	var longueur int
 
-	for longueur = 0; charPos < len(data); charPos++ {
-		if string(data[charPos:charPos+2]) == "if" && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+2])) {
+	for longueur = 0; charPos < len(data)-1; charPos++ {
+		if charPos < len(data)-1 && string(data[charPos:charPos+2]) == "if" && ((charPos < len(data)-2 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+2]))) || (charPos < len(data)-1)) {
 			dataType = keywordIf
-		} else if string(data[charPos:charPos+5]) == "while" && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5])) {
+		} else if charPos < len(data)-4 && string(data[charPos:charPos+5]) == "while" && ((charPos < len(data)-5 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5]))) || (charPos < len(data)-4)) {
 			dataType = keywordWhile
 		}
 
@@ -159,7 +171,7 @@ func getNumber(data []byte, charPos int) (tokenType, int) {
 	dataType := constant
 	var longueur int
 
-	for longueur = 0; charPos < len(data); charPos++ {
+	for longueur = 0; charPos < len(data)-1; charPos++ {
 		if !checkMatchChar(`[0-9]`, string(data[charPos+1])) {
 			break
 		}
