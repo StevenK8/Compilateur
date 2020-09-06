@@ -27,6 +27,8 @@ const (
 	pointVirgule       tokenType = "Semicolon"
 	constant           tokenType = "Number"
 	word               tokenType = "Word"
+	keywordIf          tokenType = "If"
+	keywordWhile       tokenType = "While"
 )
 
 type token struct {
@@ -242,9 +244,16 @@ func getIdent(data []byte, charPos int) (tokenType, int) {
 	var longueur int
 
 	for longueur = 0; charPos < len(data); charPos++ {
+		if string(data[charPos:charPos+2]) == "if" && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+2])) {
+			dataType = keywordIf
+		} else if string(data[charPos:charPos+5]) == "while" && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5])) {
+			dataType = keywordWhile
+		}
+
 		if !checkMatchChar(`[a-zA-Z]`, string(data[charPos+1])) {
 			break
 		}
+
 		longueur++
 	}
 

@@ -23,3 +23,13 @@ func TestGetOperator(t *testing.T) {
 		t.Errorf("Erreur longueur : ")
 	}
 }
+
+func TestLexerCondition(t *testing.T) {
+	texte := "if (a==5)"
+	tokenTab = lexer([]byte(texte))
+	dataType := tokenTab[0].dataType
+	if dataType != keywordIf {
+		t.Errorf("Erreur type : " + string(dataType))
+	}
+
+}
