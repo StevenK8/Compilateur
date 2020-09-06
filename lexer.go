@@ -21,6 +21,8 @@ const (
 	operatorMult       tokenType = "Mult"
 	parentheseOuvrante tokenType = "Open_Paren"
 	parentheseFermante tokenType = "Close_Paren"
+	leftBrace          tokenType = "Open_Brace"
+	rightBrace         tokenType = "Close_Brace"
 	pointVirgule       tokenType = "Semicolon"
 	constant           tokenType = "Number"
 	word               tokenType = "Word"
@@ -52,7 +54,7 @@ func lexer(data []byte) []token {
 			numOfLine++
 		}
 
-		if checkMatchChar("[(+*;=)]", currentChar) {
+		if checkMatchChar("[{(+*;=)}]", currentChar) {
 			dataType, longueur := getOperator(data, charPos)
 			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), 0, numOfLine})
 			charPos += longueur
@@ -138,6 +140,12 @@ func getOperator(data []byte, charPos int) (tokenType, int) {
 		break
 	case ")":
 		dataType = parentheseFermante
+		break
+	case "{":
+		dataType = leftBrace
+		break
+	case "}":
+		dataType = rightBrace
 		break
 	case ";":
 		dataType = pointVirgule
