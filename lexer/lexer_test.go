@@ -1,8 +1,9 @@
 package lexer
 
 import (
-	token "Compilateur/token"
 	"testing"
+
+	token "../token"
 )
 
 func TestOperator(t *testing.T) {

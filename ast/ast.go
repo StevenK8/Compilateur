@@ -1,9 +1,10 @@
 package ast
 
 import (
-	token "Compilateur/token"
 	"bytes"
 	"strings"
+
+	token "../token"
 )
 
 // The base Node interface

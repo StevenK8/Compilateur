@@ -1,10 +1,12 @@
 package main
 
 import (
-	lexer "Compilateur/lexer"
 	"fmt"
 	"io/ioutil"
 	"strconv"
+
+	lexer "./lexer"
+	parser "./parser"
 )
 
 func main() {
@@ -20,6 +22,6 @@ func main() {
 		println(strconv.Itoa(a.NbLigne) + " \t[" + string(a.ValeurString) + "]\t" + string(a.DataType))
 	}
 
-	// parser.Parser(tokenTab)
+	parser.Parser(tokenTab)
 
 }

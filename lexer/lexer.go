@@ -1,9 +1,10 @@
 package lexer
 
 import (
-	token "Compilateur/token"
 	"regexp"
 	"strconv"
+
+	token "../token"
 )
 
 func Lexer(data []byte) []token.Token {
