@@ -95,7 +95,7 @@ func printNoeud(N noeud, decalage int) {
 	for i := 0; i < decalage; i++ {
 		decal += "\t"
 	}
-	fmt.Println(decal, "Noeud : ", N.typeDeNoeud, " - ", N.valeurEntiere)
+	fmt.Println(decal, "\\_", "Noeud : ", N.typeDeNoeud, " - ", N.valeurEntiere)
 	for _, child := range N.fils {
 		printNoeud(child, decalage+1)
 	}
