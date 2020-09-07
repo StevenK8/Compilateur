@@ -1,6 +1,9 @@
-package main
+package parser
 
-import "log"
+import (
+	token "Compilateur/token"
+	"log"
+)
 
 type noeud struct {
 	filsG         *noeud
@@ -11,10 +14,10 @@ type noeud struct {
 	typeDeNoeud   string
 }
 
-var tokenTab []token
+var tokenTab []token.Token
 var posToken int
 
-func parser([]token) {
+func parser([]token.Token) {
 
 }
 
@@ -22,7 +25,7 @@ func avancer() {
 	posToken++
 }
 
-func courant() token {
+func courant() token.Token {
 	return tokenTab[posToken]
 }
 
@@ -32,16 +35,16 @@ func ajouterEnfant(t noeud, n noeud, a noeud) noeud {
 	return t
 }
 
-func verifier(typeCheck tokenType) bool {
-	if courant().dataType == typeCheck {
+func verifier(typeCheck token.TokenType) bool {
+	if courant().DataType == typeCheck {
 		avancer()
 		return true
 	}
 	return false
 }
 
-func accepter(typeCheck tokenType) {
-	if courant().dataType != typeCheck {
+func accepter(typeCheck token.TokenType) {
+	if courant().DataType != typeCheck {
 		log.Fatal("accepter")
 	}
 	avancer()
@@ -49,12 +52,12 @@ func accepter(typeCheck tokenType) {
 
 func a() noeud {
 	var N noeud
-	if verifier(parentheseOuvrante) {
+	if verifier(token.ParentheseOuvrante) {
 		N = e(0)
-		accepter(parentheseFermante)
-	} else if verifier(parentheseFermante) {
+		accepter(token.ParentheseFermante)
+	} else if verifier(token.ParentheseFermante) {
 		N = e(0)
-		accepter(parentheseOuvrante)
+		accepter(token.ParentheseOuvrante)
 	}
 	return N
 }
@@ -78,8 +81,8 @@ func e(valeur int) noeud {
 // }
 
 func atome() noeud {
-	if courant().dataType == constant {
-		N := noeud{nil, nil, courant().valeurString, courant().valeurInt, courant().nbLigne, "type"}
+	if courant().DataType == token.Constant {
+		N := noeud{nil, nil, courant().ValeurString, courant().ValeurInt, courant().NbLigne, "type"}
 		avancer()
 		return N
 	}

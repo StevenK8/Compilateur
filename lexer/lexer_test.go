@@ -1,14 +1,17 @@
-package main
+package lexer
 
-import "testing"
+import (
+	token "Compilateur/token"
+	"testing"
+)
 
 func TestOperator(t *testing.T) {
 	texte := "3 * 2"
 	tokenTab := lexer([]byte(texte))
-	if string(tokenTab[0].valeurString) != "3" {
+	if string(tokenTab[0].ValeurString) != "3" {
 		t.Errorf("Erreur")
 	}
-	if string(tokenTab[1].valeurString) != "*" {
+	if string(tokenTab[1].ValeurString) != "*" {
 		t.Errorf("Erreur")
 	}
 
@@ -28,11 +31,11 @@ func TestOperator(t *testing.T) {
 func TestLexerCondition(t *testing.T) {
 	texte := "if (a==5)"
 	tokenTab := lexer([]byte(texte))
-	if tokenTab[0].dataType != keywordIf {
-		t.Errorf("Erreur type : " + string(tokenTab[0].dataType))
+	if tokenTab[0].DataType != token.KeywordIf {
+		t.Errorf("Erreur type : " + string(tokenTab[0].DataType))
 	}
-	if tokenTab[0].valeurString != "if" {
-		t.Errorf("Erreur type : " + tokenTab[0].valeurString)
+	if tokenTab[0].ValeurString != "if" {
+		t.Errorf("Erreur type : " + tokenTab[0].ValeurString)
 	}
 
 }

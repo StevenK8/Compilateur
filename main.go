@@ -1,6 +1,7 @@
 package main
 
 import (
+	lexer "Compilateur/lexer"
 	"fmt"
 	"io/ioutil"
 	"strconv"
@@ -14,7 +15,7 @@ func main() {
 		return
 	}
 
-	tokenTab = lexer(data)
+	tokenTab = lexer.Lexer(data)
 	for _, a := range tokenTab {
 		println(strconv.Itoa(a.nbLigne) + " \t[" + string(a.valeurString) + "]\t" + string(a.dataType))
 	}

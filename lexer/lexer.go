@@ -1,45 +1,14 @@
-package main
+package lexer
 
 import (
+	token "Compilateur/token"
 	"regexp"
 	"strconv"
 )
 
-type tokenType string
+func Lexer(data []byte) []token.Token {
 
-const (
-	operator           tokenType = "Operator"
-	equalAdd           tokenType = "+="
-	equalSub           tokenType = "-="
-	equalMult          tokenType = "*="
-	equalIncrement     tokenType = "++"
-	equalPow           tokenType = "**"
-	equalequal         tokenType = "=="
-	equal              tokenType = "Equal"
-	operatorPlus       tokenType = "Add"
-	operatorMinus      tokenType = "Sub"
-	operatorMult       tokenType = "Mult"
-	parentheseOuvrante tokenType = "Open_Paren"
-	parentheseFermante tokenType = "Close_Paren"
-	leftBrace          tokenType = "Open_Brace"
-	rightBrace         tokenType = "Close_Brace"
-	pointVirgule       tokenType = "Semicolon"
-	constant           tokenType = "Number"
-	word               tokenType = "Word"
-	keywordIf          tokenType = "If"
-	keywordWhile       tokenType = "While"
-)
-
-type token struct {
-	dataType     tokenType
-	valeurString string
-	valeurInt    int
-	nbLigne      int
-}
-
-func lexer(data []byte) []token {
-
-	var tokenTab []token
+	var tokenTab []token.Token
 	numOfLine := 1
 
 	for charPos := 0; charPos < len(data); charPos++ {
@@ -56,11 +25,11 @@ func lexer(data []byte) []token {
 
 		if checkMatchChar("[{(+*;=)}]", currentChar) {
 			dataType, longueur := getOperator(data, charPos)
-			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), 0, numOfLine})
+			tokenTab = append(tokenTab, token.Token{dataType, string(data[charPos : charPos+longueur+1]), 0, numOfLine})
 			charPos += longueur
 		} else if checkMatchChar("[a-zA-Z]", currentChar) {
 			dataType, longueur := getIdent(data, charPos)
-			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), 0, numOfLine})
+			tokenTab = append(tokenTab, token.Token{dataType, string(data[charPos : charPos+longueur+1]), 0, numOfLine})
 			charPos += longueur
 		} else if checkMatchChar("[0-9]", currentChar) {
 			dataType, longueur := getNumber(data, charPos)
@@ -68,7 +37,7 @@ func lexer(data []byte) []token {
 			if err != nil {
 				println(err)
 			}
-			tokenTab = append(tokenTab, token{dataType, string(data[charPos : charPos+longueur+1]), i, numOfLine})
+			tokenTab = append(tokenTab, token.Token{dataType, string(data[charPos : charPos+longueur+1]), i, numOfLine})
 			charPos += longueur
 		}
 
@@ -85,84 +54,85 @@ func checkMatchChar(regex string, char string) bool {
 	return matched
 }
 
-func getOperator(data []byte, charPos int) (tokenType, int) {
-	var dataType tokenType
+func getOperator(data []byte, charPos int) (token.TokenType, int) {
+	var dataType token.TokenType
 	longueur := 0
 	switch string(data[charPos]) {
 	case "+":
-		dataType = operatorPlus
+		dataType = token.OperatorPlus
 		if charPos < len(data)-1 {
 			if string(data[charPos+1]) == "=" {
 				longueur++
-				dataType = equalAdd
+				dataType = token.EqualAdd
 			} else if string(data[charPos+1]) == "+" {
 				longueur++
-				dataType = equalIncrement
+				dataType = token.Increment
 			}
 		}
 
 		break
 	case "-":
-		dataType = operatorMinus
+		dataType = token.OperatorMinus
 		if charPos < len(data)-1 {
 			if string(data[charPos+1]) == "=" {
 				longueur++
-				dataType = equalSub
+				dataType = token.EqualSub
 			}
 		}
 
 		break
 	case "*":
-		dataType = operatorMult
+		dataType = token.OperatorMult
 		if charPos < len(data)-1 {
 			if string(data[charPos+1]) == "=" {
 				longueur++
-				dataType = equalMult
+				dataType = token.EqualMult
 			} else if string(data[charPos+1]) == "*" {
 				longueur++
-				dataType = equalPow
+				dataType = token.Pow
 			}
 		}
 
 		break
 	case "=":
-		dataType = equal
+		dataType = token.Equal
 		if charPos < len(data)-1 {
 			if string(data[charPos+1]) == "=" {
 				longueur++
-				dataType = equalequal
+				dataType = token.Equalequal
 			}
 		}
 
 		break
 	case "(":
-		dataType = parentheseOuvrante
+		dataType = token.ParentheseOuvrante
 		break
 	case ")":
-		dataType = parentheseFermante
+		dataType = token.ParentheseFermante
 		break
 	case "{":
-		dataType = leftBrace
+		dataType = token.LeftBrace
 		break
 	case "}":
-		dataType = rightBrace
+		dataType = token.RightBrace
 		break
 	case ";":
-		dataType = pointVirgule
+		dataType = token.PointVirgule
 		break
 	}
 	return dataType, longueur
 }
 
-func getIdent(data []byte, charPos int) (tokenType, int) {
-	dataType := word
+func getIdent(data []byte, charPos int) (token.TokenType, int) {
+	var dataType token.TokenType
+	dataType = token.Word
 	var longueur int
 
 	for longueur = 0; charPos < len(data)-1; charPos++ {
 		if charPos < len(data)-1 && string(data[charPos:charPos+2]) == "if" && ((charPos < len(data)-2 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+2]))) || (charPos < len(data)-1)) {
-			dataType = keywordIf
+			dataType = token.KeywordIf
 		} else if charPos < len(data)-4 && string(data[charPos:charPos+5]) == "while" && ((charPos < len(data)-5 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5]))) || (charPos < len(data)-4)) {
-			dataType = keywordWhile
+			dataType = token.KeywordWhile
 		}
 
 		if !checkMatchChar(`[a-zA-Z]`, string(data[charPos+1])) {
@@ -175,8 +145,9 @@ func getIdent(data []byte, charPos int) (tokenType, int) {
 	return dataType, longueur
 }
 
-func getNumber(data []byte, charPos int) (tokenType, int) {
-	dataType := constant
+func getNumber(data []byte, charPos int) (token.TokenType, int) {
+	var dataType token.TokenType
+	dataType = token.Constant
 	var longueur int
 
 	for longueur = 0; charPos < len(data)-1; charPos++ {
@@ -187,29 +158,4 @@ func getNumber(data []byte, charPos int) (tokenType, int) {
 	}
 
 	return dataType, longueur
-}
-
-func contains(arr []string, str string) bool {
-	for _, a := range arr {
-		if a == str {
-			return true
-		}
-	}
-	return false
-}
-
-func isOperator(op string) bool {
-	operators := []string{"+", "-", "*", "/", "%", "^"}
-	if contains(operators, op) {
-		return true
-	}
-	return false
-}
-
-func isIdent(id string) bool {
-	ident := []string{"if", "for", "while", "else"}
-	if contains(ident, id) {
-		return true
-	}
-	return false
 }
