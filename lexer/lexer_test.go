@@ -7,7 +7,7 @@ import (
 
 func TestOperator(t *testing.T) {
 	texte := "3 * 2"
-	tokenTab := lexer([]byte(texte))
+	tokenTab := Lexer([]byte(texte))
 	if string(tokenTab[0].ValeurString) != "3" {
 		t.Errorf("Erreur")
 	}
@@ -30,7 +30,7 @@ func TestOperator(t *testing.T) {
 
 func TestLexerCondition(t *testing.T) {
 	texte := "if (a==5)"
-	tokenTab := lexer([]byte(texte))
+	tokenTab := Lexer([]byte(texte))
 	if tokenTab[0].DataType != token.KeywordIf {
 		t.Errorf("Erreur type : " + string(tokenTab[0].DataType))
 	}

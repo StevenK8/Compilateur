@@ -3,17 +3,21 @@ package token
 type TokenType string
 
 const (
-	Operator           = "Operator"
 	EqualAdd           = "+="
 	EqualSub           = "-="
 	EqualMult          = "*="
+	EqualDiv           = "/="
 	Increment          = "++"
 	Pow                = "**"
+	NotEqual           = "!="
+	LessThan           = "<"
+	GreaterThan        = ">"
 	Equalequal         = "=="
 	Equal              = "Equal"
 	OperatorPlus       = "Add"
 	OperatorMinus      = "Sub"
 	OperatorMult       = "Mult"
+	OperatorDiv        = "Div"
 	ParentheseOuvrante = "Open_Paren"
 	ParentheseFermante = "Close_Paren"
 	LeftBrace          = "Open_Brace"
@@ -22,7 +26,11 @@ const (
 	Constant           = "Number"
 	Word               = "Word"
 	KeywordIf          = "If"
+	KeywordElse        = "Else"
 	KeywordWhile       = "While"
+	BooleanTrue        = "True"
+	BooleanFalse       = "False"
+	EOF                = "EOF"
 )
 
 type Token struct {

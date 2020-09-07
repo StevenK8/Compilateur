@@ -23,7 +23,7 @@ func Lexer(data []byte) []token.Token {
 			numOfLine++
 		}
 
-		if checkMatchChar("[{(+*;=)}]", currentChar) {
+		if checkMatchChar("[<{(+*;=!/)}>]", currentChar) {
 			dataType, longueur := getOperator(data, charPos)
 			tokenTab = append(tokenTab, token.Token{dataType, string(data[charPos : charPos+longueur+1]), 0, numOfLine})
 			charPos += longueur
@@ -92,8 +92,18 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.Pow
 			}
 		}
-
 		break
+
+	case "/":
+		dataType = token.OperatorDiv
+		if charPos < len(data)-1 {
+			if string(data[charPos+1]) == "=" {
+				longueur++
+				dataType = token.EqualDiv
+			}
+		}
+		break
+
 	case "=":
 		dataType = token.Equal
 		if charPos < len(data)-1 {
@@ -102,8 +112,18 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.Equalequal
 			}
 		}
-
 		break
+
+	case "!":
+		dataType = token.Equal
+		if charPos < len(data)-1 {
+			if string(data[charPos+1]) == "=" {
+				longueur++
+				dataType = token.NotEqual
+			}
+		}
+		break
+
 	case "(":
 		dataType = token.ParentheseOuvrante
 		break
@@ -119,6 +139,12 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 	case ";":
 		dataType = token.PointVirgule
 		break
+	case "<":
+		dataType = token.LessThan
+		break
+	case ">":
+		dataType = token.GreaterThan
+		break
 	}
 	return dataType, longueur
 }
@@ -133,6 +159,12 @@ func getIdent(data []byte, charPos int) (token.TokenType, int) {
 			dataType = token.KeywordIf
 		} else if charPos < len(data)-4 && string(data[charPos:charPos+5]) == "while" && ((charPos < len(data)-5 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5]))) || (charPos < len(data)-4)) {
 			dataType = token.KeywordWhile
+		} else if charPos < len(data)-3 && string(data[charPos:charPos+4]) == "true" && ((charPos < len(data)-4 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+4]))) || (charPos < len(data)-3)) {
+			dataType = token.BooleanTrue
+		} else if charPos < len(data)-4 && string(data[charPos:charPos+5]) == "false" && ((charPos < len(data)-5 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5]))) || (charPos < len(data)-4)) {
+			dataType = token.BooleanFalse
+		} else if charPos < len(data)-3 && string(data[charPos:charPos+4]) == "else" && ((charPos < len(data)-4 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+4]))) || (charPos < len(data)-3)) {
+			dataType = token.BooleanTrue
 		}
 
 		if !checkMatchChar(`[a-zA-Z]`, string(data[charPos+1])) {
