@@ -2,6 +2,37 @@ package main
 
 import "log"
 
+type typeNoeud string
+
+const (
+	noeudPlus				typeNoeud = "Noeud_Add"
+	noeudMinus				typeNoeud = "Noeud_Sub"
+	noeudOperatorMult       typeNoeud = "Noeud_Mult"
+	noeudOperatorDiv		typeNoeud = "Noeud_Div"
+	noeudOperatorModul	   	typeNoeud = "Noeud_Mod"
+	noeudParentheseOuvrante typeNoeud = "Noeud_Open_Paren"
+	noeudParentheseFermante typeNoeud = "Noeud_Close_Paren"
+	noeudLeftBrace          typeNoeud = "Noeud_Open_Brace"
+	noeudRightBrace         typeNoeud = "Noeud_Close_Brace"
+	noeudPointVirgule       typeNoeud = "Noeud_Semicolon"
+	noeudconstant           typeNoeud = "Noeud_Number"
+)
+
+type priorite struct {
+    prioBas		int
+    prioHaut 	int
+    typeOfNoeud	typeNoeud
+}
+
+const prioBase []priorite { 
+		priorite {10, 11, operatorPlus},
+		priorite {10, 11, operatorMinus},
+		priorite {20, 21, operatorMult},
+		priorite {20, 21, operatorDiv},
+		priorite {20, 21, operatorModul},
+		priorite {60, 61, noeudParentheseOuvrante},
+}
+
 type noeud struct {
 	filsG         *noeud
 	filsD         *noeud
