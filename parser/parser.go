@@ -48,7 +48,7 @@ type noeud struct {
 var tokenTab []token.Token
 var posToken int
 
-func parser([]token.Token) {
+func Parser([]token.Token) {
 
 }
 

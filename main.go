@@ -15,11 +15,11 @@ func main() {
 		return
 	}
 
-	tokenTab = lexer.Lexer(data)
+	tokenTab := lexer.Lexer(data)
 	for _, a := range tokenTab {
-		println(strconv.Itoa(a.nbLigne) + " \t[" + string(a.valeurString) + "]\t" + string(a.dataType))
+		println(strconv.Itoa(a.NbLigne) + " \t[" + string(a.ValeurString) + "]\t" + string(a.DataType))
 	}
 
-	parser(tokenTab)
+	// parser.Parser(tokenTab)
 
 }
