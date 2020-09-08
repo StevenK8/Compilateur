@@ -10,24 +10,33 @@ import (
 type typeNoeud string
 
 const (
-	Noeud_Expo typeNoeud = "Noeud_Expo"
-	Noeud_Mult typeNoeud = "Noeud_Mult"
-	Noeud_Div  typeNoeud = "Noeud_Div"
-	Noeud_Mod  typeNoeud = "Noeud_Mod"
-	Noeud_Add  typeNoeud = "Noeud_Add"
-	Noeud_Sub  typeNoeud = "Noeud_Sub"
+	NoeudExpo typeNoeud = "NoeudExpo"
+	NoeudMult typeNoeud = "NoeudMult"
+	NoeudDiv  typeNoeud = "NoeudDiv"
+	NoeudMod  typeNoeud = "NoeudMod"
+	NoeudAdd  typeNoeud = "NoeudAdd"
+	NoeudSub  typeNoeud = "NoeudSub"
 
-	Noeud_LessThan    typeNoeud = "Noeud_LessThan"
-	Noeud_GreaterThan typeNoeud = "Noeud_GreaterThan"
-	Noeud_Equalequal  typeNoeud = "Noeud_Equalequal"
-	Noeud_NotEqual    typeNoeud = "Noeud_NotEqual"
+	NoeudLessThan    typeNoeud = "NoeudLessThan"
+	NoeudGreaterThan typeNoeud = "NoeudGreaterThan"
+	NoeudEqualequal  typeNoeud = "NoeudEqualequal"
+	NoeudNotEqual    typeNoeud = "NoeudNotEqual"
 
-	Noeud_And typeNoeud = "Noeud_And"
-	Noeud_Or  typeNoeud = "Noeud_Or"
+	NoeudSubUnaire typeNoeud = "NoeudSubUnaire"
+	NoeudNot       typeNoeud = "NoeudNot"
 
-	Noeud_Open_Paren  typeNoeud = "Noeud_Open_Paren"
-	Noeud_Close_Paren typeNoeud = "Noeud_Close_Paren"
-	Noeud_Const       typeNoeud = "Noeud_Const"
+	NoeudAnd typeNoeud = "NoeudAnd"
+	NoeudOr  typeNoeud = "NoeudOr"
+
+	NoeudOpenParen  typeNoeud = "NoeudOpen_Paren"
+	NoeudCloseParen typeNoeud = "NoeudClose_Paren"
+	NoeudConst      typeNoeud = "NoeudConst"
+
+	NoeudDebug typeNoeud = "NoeudDebug"
+
+	NoeudBlock typeNoeud = "NoeudBlock"
+	NoeudDrop  typeNoeud = "NoeudDrop"
+	NoeudTest  typeNoeud = "NoeudTest"
 )
 
 type operation struct {
@@ -37,23 +46,25 @@ type operation struct {
 	typeOfNoeud typeNoeud
 }
 
-var tab_operation = []operation{
-	//	operation {token.Exposant, 60, 61, Noeud_Expo},
-	operation{token.OperatorMult, 50, 51, Noeud_Mult},
-	operation{token.OperatorDiv, 50, 51, Noeud_Div},
-	//	operation {token.Modulo, 50, 51, Noeud_Mod},
-	operation{token.OperatorPlus, 40, 41, Noeud_Add},
-	operation{token.OperatorMinus, 40, 41, Noeud_Sub},
-	operation{token.LessThan, 30, 31, Noeud_LessThan},
-	operation{token.GreaterThan, 30, 31, Noeud_GreaterThan},
-	operation{token.Equalequal, 30, 31, Noeud_Equalequal},
-	operation{token.NotEqual, 30, 31, Noeud_NotEqual},
-	// operation {token.And, 20, 21, Noeud_And},
-	// operation {token.Or, 10, 11, Noeud_Or}
+var tabOperation = []operation{
+	//	operation {token.Exposant, 60, 61, NoeudExpo},
+	operation{token.Not, 55, 56, NoeudNot},
+	operation{token.MinusUnaire, 55, 56, NoeudSubUnaire},
+	operation{token.OperatorMult, 50, 51, NoeudMult},
+	operation{token.OperatorDiv, 50, 51, NoeudDiv},
+	//	operation {token.Modulo, 50, 51, NoeudMod},
+	operation{token.OperatorPlus, 40, 41, NoeudAdd},
+	operation{token.OperatorMinus, 40, 41, NoeudSub},
+	operation{token.LessThan, 30, 31, NoeudLessThan},
+	operation{token.GreaterThan, 30, 31, NoeudGreaterThan},
+	operation{token.Equalequal, 30, 31, NoeudEqualequal},
+	operation{token.NotEqual, 30, 31, NoeudNotEqual},
+	operation{token.And, 20, 21, NoeudAnd},
+	operation{token.Or, 10, 11, NoeudOr},
 }
 
 func estPrio(typeWanted token.TokenType) bool {
-	for _, prioBase := range tab_operation {
+	for _, prioBase := range tabOperation {
 		if typeWanted == prioBase.typeOfToken {
 			return true
 		}
@@ -62,7 +73,7 @@ func estPrio(typeWanted token.TokenType) bool {
 }
 
 func getPrio(typeWanted token.TokenType) operation {
-	for _, prioBase := range tab_operation {
+	for _, prioBase := range tabOperation {
 		if typeWanted == prioBase.typeOfToken {
 			return prioBase
 		}
@@ -72,31 +83,32 @@ func getPrio(typeWanted token.TokenType) operation {
 	return operation{"", 0, 0, ""}
 }
 
-type noeud struct {
-	typeDeNoeud   typeNoeud
-	nbLigne       int
-	fils          []noeud
-	valeurEntiere int
+type Noeud struct {
+	TypeDeNoeud   typeNoeud
+	NbLigne       int
+	Fils          []Noeud
+	ValeurEntiere int
 }
 
 var tokenTab []token.Token
 var posToken int
 
 // Parser : Main function of this package
-func Parser(afterLexer []token.Token) {
+func Parser(afterLexer []token.Token) Noeud {
 	tokenTab = afterLexer
-	var mainNoeud noeud = expression(0)
+	var mainNoeud Noeud = instruction()
 
 	printNoeud(mainNoeud, 0)
+	return mainNoeud
 }
 
-func printNoeud(N noeud, decalage int) {
-	var decal string = ""
+func printNoeud(N Noeud, decalage int) {
+	var decal string
 	for i := 0; i < decalage; i++ {
 		decal += "\t"
 	}
-	fmt.Println(decal, "\\_", "Noeud : ", N.typeDeNoeud, " - ", N.valeurEntiere)
-	for _, child := range N.fils {
+	fmt.Println(decal, "\\_", "Noeud : ", N.TypeDeNoeud, " - ", N.ValeurEntiere)
+	for _, child := range N.Fils {
 		printNoeud(child, decalage+1)
 	}
 }
@@ -112,9 +124,9 @@ func courant() token.Token {
 	return token.Token{token.EOF, "", 0, -1}
 }
 
-func ajouterEnfant(parent noeud, childs ...noeud) noeud {
+func ajouterEnfant(parent Noeud, childs ...Noeud) Noeud {
 	for _, child := range childs {
-		parent.fils = append(parent.fils, child)
+		parent.Fils = append(parent.Fils, child)
 	}
 	return parent
 }
@@ -134,21 +146,29 @@ func accepter(typeCheck token.TokenType) {
 	avancer()
 }
 
-func nouveauNoeud(typeDuNoeud typeNoeud, LineNumber int) noeud {
-	return noeud{typeDuNoeud, LineNumber, nil, 0}
+func nouveauNoeud(typeDuNoeud typeNoeud, LineNumber int) Noeud {
+	return Noeud{typeDuNoeud, LineNumber, nil, 0}
 }
 
-func atome() noeud {
-	var N noeud
+func atome() Noeud {
+	var N Noeud
 	if verifier(token.ParentheseOuvrante) {
 		N = expression(0)
 		accepter(token.ParentheseFermante)
 		return N
-	}
-
-	if courant().DataType == token.Constant {
-		N = nouveauNoeud(Noeud_Const, courant().NbLigne)
-		N.valeurEntiere = courant().ValeurInt
+	} else if verifier(token.OperatorMinus) {
+		N = nouveauNoeud(NoeudSubUnaire, courant().NbLigne)
+		A := expression(getPrio(token.MinusUnaire).prioD)
+		N = ajouterEnfant(N, A)
+		return N
+	} else if verifier(token.Not) {
+		N = nouveauNoeud(NoeudNot, courant().NbLigne)
+		A := expression(getPrio(token.Not).prioD)
+		N = ajouterEnfant(N, A)
+		return N
+	} else if courant().DataType == token.Constant {
+		N = nouveauNoeud(NoeudConst, courant().NbLigne)
+		N.ValeurEntiere = courant().ValeurInt
 		avancer()
 		return N
 	}
@@ -157,15 +177,15 @@ func atome() noeud {
 	return N
 }
 
-func expression(prioMin int) noeud {
-	var N noeud = atome()
+func expression(prioMin int) Noeud {
+	var N Noeud = atome()
 	if estPrio(courant().DataType) {
 		for getPrio(courant().DataType).prioG > prioMin {
 			var op operation = getPrio(courant().DataType)
 			var line int = courant().NbLigne
 			avancer()
-			var A noeud = expression(op.prioD)
-			var T noeud = nouveauNoeud(op.typeOfNoeud, line)
+			var A Noeud = expression(op.prioD)
+			var T Noeud = nouveauNoeud(op.typeOfNoeud, line)
 			T = ajouterEnfant(T, N, A)
 			N = T
 			if !estPrio(courant().DataType) {
@@ -174,4 +194,43 @@ func expression(prioMin int) noeud {
 		}
 	}
 	return N
+}
+
+func instruction() Noeud {
+	var N Noeud
+
+	if verifier(token.Debug) {
+		E := expression(0)
+		accepter(token.PointVirgule)
+		N = nouveauNoeud(NoeudDebug, courant().NbLigne)
+		N = ajouterEnfant(N, E)
+		return N
+
+	} else if verifier(token.LeftBrace) {
+		N = nouveauNoeud(NoeudBlock, courant().NbLigne)
+		for !verifier(token.RightBrace) {
+			N = ajouterEnfant(N, instruction())
+		}
+		return N
+
+	} else if verifier(token.KeywordIf) {
+		accepter(token.ParentheseOuvrante)
+		E1 := expression(0)
+		accepter(token.ParentheseFermante)
+		I1 := instruction()
+		N = nouveauNoeud(NoeudTest, courant().NbLigne)
+		N = ajouterEnfant(N, E1, I1)
+		if verifier(token.KeywordElse) {
+			I2 := instruction()
+			N = ajouterEnfant(N, I2)
+		}
+		return N
+	} else {
+		E1 := expression(0)
+		accepter(token.PointVirgule)
+		N = nouveauNoeud(NoeudDrop, courant().NbLigne)
+		N = ajouterEnfant(N, E1)
+		return N
+	}
+
 }

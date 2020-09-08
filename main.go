@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"strconv"
 
+	gencode "Compilateur/gencode"
 	lexer "Compilateur/lexer"
 	parser "Compilateur/parser"
 )
@@ -22,6 +23,10 @@ func main() {
 		fmt.Println(strconv.Itoa(a.NbLigne) + " \t[" + string(a.ValeurString) + "]\t" + string(a.DataType))
 	}
 
-	parser.Parser(tokenTab)
+	p := parser.Parser(tokenTab)
+	g := gencode.Gen(p)
+	for _, instruction := range g {
+		fmt.Println(instruction + "\n")
+	}
 
 }

@@ -25,12 +25,12 @@ func Lexer(data []byte) []token.Token {
 		}
 
 		dataType, longueur := getOperator(data, charPos)
-		i, err := strconv.Atoi(string(data[charPos : charPos+longueur+1]))
-		// if err != nil {
-		// 	println(err)
-		// }
-		tokenTab = append(tokenTab, token.Token{dataType, string(data[charPos : charPos+longueur+1]), i, numOfLine})
-		charPos += longueur
+
+		if dataType != token.Ignore {
+			i, _ := strconv.Atoi(string(data[charPos : charPos+longueur+1]))
+			tokenTab = append(tokenTab, token.Token{dataType, string(data[charPos : charPos+longueur+1]), i, numOfLine})
+			charPos += longueur
+		}
 
 	}
 	return tokenTab
@@ -183,6 +183,10 @@ func getIdent(data []byte, charPos int) (token.TokenType, int) {
 	dataType = token.Word
 	var longueur int
 
+	if !checkMatchChar(`[a-zA-Z]`, string(data[charPos])) {
+		return getNumber(data, charPos)
+	}
+
 	for longueur = 0; charPos < len(data)-1; charPos++ {
 		if charPos < len(data)-1 && string(data[charPos:charPos+2]) == "if" && ((charPos < len(data)-2 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+2]))) || (charPos < len(data)-1)) {
 			dataType = token.KeywordIf
@@ -193,7 +197,9 @@ func getIdent(data []byte, charPos int) (token.TokenType, int) {
 		} else if charPos < len(data)-4 && string(data[charPos:charPos+5]) == "false" && ((charPos < len(data)-5 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5]))) || (charPos < len(data)-4)) {
 			dataType = token.BooleanFalse
 		} else if charPos < len(data)-3 && string(data[charPos:charPos+4]) == "else" && ((charPos < len(data)-4 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+4]))) || (charPos < len(data)-3)) {
-			dataType = token.BooleanTrue
+			dataType = token.KeywordElse
+		} else if charPos < len(data)-4 && string(data[charPos:charPos+5]) == "debug" && ((charPos < len(data)-5 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5]))) || (charPos < len(data)-4)) {
+			dataType = token.Debug
 		}
 
 		if !checkMatchChar(`[a-zA-Z]`, string(data[charPos+1])) {
@@ -201,9 +207,6 @@ func getIdent(data []byte, charPos int) (token.TokenType, int) {
 		}
 
 		longueur++
-	}
-	if !checkMatchChar(`[a-zA-Z]`, string(data[charPos])) {
-		return getNumber(data, charPos)
 	}
 
 	return dataType, longueur
@@ -213,6 +216,10 @@ func getNumber(data []byte, charPos int) (token.TokenType, int) {
 	var dataType token.TokenType
 	dataType = token.Constant
 	var longueur int
+
+	if !checkMatchChar(`[0-9]`, string(data[charPos])) {
+		return token.Ignore, 0
+	}
 
 	for longueur = 0; charPos < len(data)-1; charPos++ {
 		if !checkMatchChar(`[0-9]`, string(data[charPos+1])) {

@@ -36,6 +36,9 @@ const (
 	And                = "And"
 	Or                 = "Or"
 	EOF                = "EOF"
+	MinusUnaire        = "-u"
+	Debug              = "Debug"
+	Ignore             = "Ignored"
 )
 
 type Token struct {
