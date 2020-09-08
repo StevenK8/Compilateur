@@ -30,6 +30,8 @@ const (
 	KeywordWhile       = "While"
 	BooleanTrue        = "True"
 	BooleanFalse       = "False"
+	And                = "And"
+	Or                 = "Or"
 	EOF                = "EOF"
 )
 

@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"strconv"
 
-	lexer "./lexer"
-	parser "./parser"
+	lexer "Compilateur/lexer"
+	parser "Compilateur/parser"
 )
 
 func main() {
