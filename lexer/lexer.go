@@ -24,7 +24,7 @@ func Lexer(data []byte) []token.Token {
 			numOfLine++
 		}
 
-		if checkMatchChar("[<{(+*;=!/&|)}>]", currentChar) {
+		if checkMatchChar("[<{(+*;=!/&|%)}>]", currentChar) {
 			dataType, longueur := getOperator(data, charPos)
 			tokenTab = append(tokenTab, token.Token{dataType, string(data[charPos : charPos+longueur+1]), 0, numOfLine})
 			charPos += longueur
@@ -101,6 +101,16 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 			if string(data[charPos+1]) == "=" {
 				longueur++
 				dataType = token.EqualDiv
+			}
+		}
+		break
+
+	case "%":
+		dataType = token.OperatorMod
+		if charPos < len(data)-1 {
+			if string(data[charPos+1]) == "=" {
+				longueur++
+				dataType = token.EqualMod
 			}
 		}
 		break
