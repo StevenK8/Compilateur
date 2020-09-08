@@ -24,23 +24,13 @@ func Lexer(data []byte) []token.Token {
 			numOfLine++
 		}
 
-		if checkMatchChar("[<{(+*;=!/&|%)}>]", currentChar) {
-			dataType, longueur := getOperator(data, charPos)
-			tokenTab = append(tokenTab, token.Token{dataType, string(data[charPos : charPos+longueur+1]), 0, numOfLine})
-			charPos += longueur
-		} else if checkMatchChar("[a-zA-Z]", currentChar) {
-			dataType, longueur := getIdent(data, charPos)
-			tokenTab = append(tokenTab, token.Token{dataType, string(data[charPos : charPos+longueur+1]), 0, numOfLine})
-			charPos += longueur
-		} else if checkMatchChar("[0-9]", currentChar) {
-			dataType, longueur := getNumber(data, charPos)
-			i, err := strconv.Atoi(string(data[charPos : charPos+longueur+1]))
-			if err != nil {
-				println(err)
-			}
-			tokenTab = append(tokenTab, token.Token{dataType, string(data[charPos : charPos+longueur+1]), i, numOfLine})
-			charPos += longueur
-		}
+		dataType, longueur := getOperator(data, charPos)
+		i, err := strconv.Atoi(string(data[charPos : charPos+longueur+1]))
+		// if err != nil {
+		// 	println(err)
+		// }
+		tokenTab = append(tokenTab, token.Token{dataType, string(data[charPos : charPos+longueur+1]), i, numOfLine})
+		charPos += longueur
 
 	}
 	return tokenTab
@@ -70,8 +60,8 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.Increment
 			}
 		}
-
 		break
+
 	case "-":
 		dataType = token.OperatorMinus
 		if charPos < len(data)-1 {
@@ -80,8 +70,8 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.EqualSub
 			}
 		}
-
 		break
+
 	case "*":
 		dataType = token.OperatorMult
 		if charPos < len(data)-1 {
@@ -156,24 +146,34 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 	case "(":
 		dataType = token.ParentheseOuvrante
 		break
+
 	case ")":
 		dataType = token.ParentheseFermante
 		break
+
 	case "{":
 		dataType = token.LeftBrace
 		break
+
 	case "}":
 		dataType = token.RightBrace
 		break
+
 	case ";":
 		dataType = token.PointVirgule
 		break
+
 	case "<":
 		dataType = token.LessThan
 		break
+
 	case ">":
 		dataType = token.GreaterThan
 		break
+	default:
+		return getIdent(data, charPos)
+		break
+
 	}
 	return dataType, longueur
 }
@@ -201,6 +201,9 @@ func getIdent(data []byte, charPos int) (token.TokenType, int) {
 		}
 
 		longueur++
+	}
+	if !checkMatchChar(`[a-zA-Z]`, string(data[charPos])) {
+		return getNumber(data, charPos)
 	}
 
 	return dataType, longueur

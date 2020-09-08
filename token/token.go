@@ -15,17 +15,17 @@ const (
 	LessThan           = "<"
 	GreaterThan        = ">"
 	Equalequal         = "=="
-	Equal              = "Equal"
-	OperatorPlus       = "Add"
-	OperatorMinus      = "Sub"
-	OperatorMult       = "Mult"
-	OperatorDiv        = "Div"
-	OperatorMod        = "Mod"
-	ParentheseOuvrante = "Open_Paren"
-	ParentheseFermante = "Close_Paren"
-	LeftBrace          = "Open_Brace"
-	RightBrace         = "Close_Brace"
-	PointVirgule       = "Semicolon"
+	Equal              = "Equal"       // =
+	OperatorPlus       = "Add"         // +
+	OperatorMinus      = "Sub"         // -
+	OperatorMult       = "Mult"        // *
+	OperatorDiv        = "Div"         // /
+	OperatorMod        = "Mod"         // %
+	ParentheseOuvrante = "Open_Paren"  // (
+	ParentheseFermante = "Close_Paren" // )
+	LeftBrace          = "Open_Brace"  // {
+	RightBrace         = "Close_Brace" // }
+	PointVirgule       = "Semicolon"   // ;
 	Constant           = "Number"
 	Word               = "Word"
 	KeywordIf          = "If"

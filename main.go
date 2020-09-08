@@ -19,7 +19,7 @@ func main() {
 
 	tokenTab := lexer.Lexer(data)
 	for _, a := range tokenTab {
-		println(strconv.Itoa(a.NbLigne) + " \t[" + string(a.ValeurString) + "]\t" + string(a.DataType))
+		fmt.Println(strconv.Itoa(a.NbLigne) + " \t[" + string(a.ValeurString) + "]\t" + string(a.DataType))
 	}
 
 	parser.Parser(tokenTab)
