@@ -126,7 +126,7 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 		break
 
 	case "!":
-		dataType = token.Equal
+		dataType = token.Not
 		if charPos < len(data)-1 {
 			if string(data[charPos+1]) == "=" {
 				longueur++

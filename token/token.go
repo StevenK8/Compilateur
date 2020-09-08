@@ -11,6 +11,7 @@ const (
 	Increment          = "++"
 	Pow                = "**"
 	NotEqual           = "!="
+	Not                = "!"
 	LessThan           = "<"
 	GreaterThan        = ">"
 	Equalequal         = "=="
