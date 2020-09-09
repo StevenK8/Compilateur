@@ -10,12 +10,13 @@ import (
 type typeNoeud string
 
 const (
-	NoeudExpo typeNoeud = "NoeudExpo"
-	NoeudMult typeNoeud = "NoeudMult"
-	NoeudDiv  typeNoeud = "NoeudDiv"
-	NoeudMod  typeNoeud = "NoeudMod"
-	NoeudAdd  typeNoeud = "NoeudAdd"
-	NoeudSub  typeNoeud = "NoeudSub"
+	NoeudExpo  typeNoeud = "NoeudExpo"
+	NoeudMult  typeNoeud = "NoeudMult"
+	NoeudDiv   typeNoeud = "NoeudDiv"
+	NoeudMod   typeNoeud = "NoeudMod"
+	NoeudAdd   typeNoeud = "NoeudAdd"
+	NoeudSub   typeNoeud = "NoeudSub"
+	NoeudEqual typeNoeud = "NoeudEqual"
 
 	NoeudLessThan    typeNoeud = "NoeudLessThan"
 	NoeudGreaterThan typeNoeud = "NoeudGreaterThan"
@@ -61,6 +62,7 @@ var tabOperation = []operation{
 	operation{token.NotEqual, 30, 31, NoeudNotEqual},
 	operation{token.And, 20, 21, NoeudAnd},
 	operation{token.Or, 10, 11, NoeudOr},
+	operation{token.Equal, 5, 5, NoeudEqual},
 }
 
 func estPrio(typeWanted token.TokenType) bool {
