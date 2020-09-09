@@ -11,7 +11,7 @@ func TestParse(t *testing.T) {
 	tokenTab := lexer.Lexer([]byte(texte))
 
 	p := Parser(tokenTab)
-	if p.typeDeNoeud != NoeudMult {
+	if p.TypeDeNoeud != NoeudMult {
 		fmt.Println("Erreur mult")
 	}
 }

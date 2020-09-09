@@ -1,10 +1,11 @@
-package Gencode
+package gencode
 
 import (
 	parser "Compilateur/parser"
 	"fmt"
 )
 
+var lblIncrementName = 1
 var listOfAssembleurInstructions []string
 
 func Gencode(Node parser.Noeud) {
@@ -71,6 +72,21 @@ func Gencode(Node parser.Noeud) {
 		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "drop")
 		break
 
+	case parser.NoeudTest:
+		label1 := "label" + fmt.Sprint(lblIncrementName)
+		lblIncrementName++
+		label2 := "label" + fmt.Sprint(lblIncrementName)
+		lblIncrementName++
+		Gencode(Node.Fils[0])
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "jumpf "+label1)
+		Gencode(Node.Fils[1])
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "jump "+label2)
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "."+label1)
+		if len(Node.Fils) == 3 {
+			Gencode(Node.Fils[2])
+		}
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "."+label2)
+		break
 	}
 }
 

@@ -10,13 +10,15 @@ import (
 type typeNoeud string
 
 const (
-	NoeudExpo  typeNoeud = "NoeudExpo"
-	NoeudMult  typeNoeud = "NoeudMult"
-	NoeudDiv   typeNoeud = "NoeudDiv"
-	NoeudMod   typeNoeud = "NoeudMod"
-	NoeudAdd   typeNoeud = "NoeudAdd"
-	NoeudSub   typeNoeud = "NoeudSub"
-	NoeudEqual typeNoeud = "NoeudEqual"
+	NoeudExpo   typeNoeud = "NoeudExpo"
+	NoeudMult   typeNoeud = "NoeudMult"
+	NoeudDiv    typeNoeud = "NoeudDiv"
+	NoeudMod    typeNoeud = "NoeudMod"
+	NoeudAdd    typeNoeud = "NoeudAdd"
+	NoeudSub    typeNoeud = "NoeudSub"
+	NoeudDec    typeNoeud = "NoeudDeclaration"
+	NoeudRef    typeNoeud = "NoeudReference"
+	NoeudAffect typeNoeud = "NoeudAffection"
 
 	NoeudLessThan    typeNoeud = "NoeudLessThan"
 	NoeudGreaterThan typeNoeud = "NoeudGreaterThan"
@@ -62,7 +64,7 @@ var tabOperation = []operation{
 	operation{token.NotEqual, 30, 31, NoeudNotEqual},
 	operation{token.And, 20, 21, NoeudAnd},
 	operation{token.Or, 10, 11, NoeudOr},
-	operation{token.Equal, 5, 5, NoeudEqual},
+	operation{token.Equal, 5, 5, NoeudAffect},
 }
 
 func estPrio(typeWanted token.TokenType) bool {
@@ -90,6 +92,8 @@ type Noeud struct {
 	NbLigne       int
 	Fils          []Noeud
 	ValeurEntiere int
+	ValeurString  string
+	Slot          int
 }
 
 var tokenTab []token.Token
@@ -149,7 +153,7 @@ func accepter(typeCheck token.TokenType) {
 }
 
 func nouveauNoeud(typeDuNoeud typeNoeud, LineNumber int) Noeud {
-	return Noeud{typeDuNoeud, LineNumber, nil, 0}
+	return Noeud{typeDuNoeud, LineNumber, nil, 0, "", 0}
 }
 
 func atome() Noeud {
@@ -172,6 +176,10 @@ func atome() Noeud {
 		N = nouveauNoeud(NoeudConst, courant().NbLigne)
 		N.ValeurEntiere = courant().ValeurInt
 		avancer()
+		return N
+	} else if courant().DataType == token.Ident {
+		N = nouveauNoeud(NoeudRef, courant().NbLigne)
+		N.ValeurString = courant().ValeurString
 		return N
 	}
 
@@ -226,6 +234,11 @@ func instruction() Noeud {
 			I2 := instruction()
 			N = ajouterEnfant(N, I2)
 		}
+		return N
+	} else if verifier(token.KeywordInt) {
+		N = nouveauNoeud(NoeudDec, courant().NbLigne)
+		N.ValeurString = courant().ValeurString
+		accepter(token.PointVirgule)
 		return N
 	} else {
 		E1 := expression(0)

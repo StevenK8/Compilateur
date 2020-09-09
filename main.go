@@ -26,7 +26,7 @@ func main() {
 	p := parser.Parser(tokenTab)
 	g := gencode.Gen(p)
 	for _, instruction := range g {
-		fmt.Println(instruction + "\n")
+		fmt.Println(instruction)
 	}
 
 }
