@@ -180,7 +180,7 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 
 func getIdent(data []byte, charPos int) (token.TokenType, int) {
 	var dataType token.TokenType
-	dataType = token.Word
+	dataType = token.Ident
 	var longueur int
 
 	if !checkMatchChar(`[a-zA-Z]`, string(data[charPos])) {
@@ -200,6 +200,8 @@ func getIdent(data []byte, charPos int) (token.TokenType, int) {
 			dataType = token.KeywordElse
 		} else if charPos < len(data)-4 && string(data[charPos:charPos+5]) == "debug" && ((charPos < len(data)-5 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5]))) || (charPos < len(data)-4)) {
 			dataType = token.Debug
+		} else if charPos < len(data)-2 && string(data[charPos:charPos+3]) == "int" && ((charPos < len(data)-3 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+3]))) || (charPos < len(data)-2)) {
+			dataType = token.KeywordInt
 		}
 
 		if !checkMatchChar(`[a-zA-Z]`, string(data[charPos+1])) {
