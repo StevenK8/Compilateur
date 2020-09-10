@@ -57,8 +57,6 @@ func (c *customQueue) Empty() bool {
 var NbSlot int
 var pile customQueue
 
-// var pile []map[string]Symbol
-
 func Sem(N parser.Noeud) parser.Noeud {
 	switch N.TypeDeNoeud {
 	default:
@@ -132,7 +130,10 @@ func Declarer(ident string) (Symbol, error) {
 
 func Acceder(ident string) (Symbol, error) {
 	for pile.Size() > 0 {
-		hash, _ := pile.Front()
+		hash, err := pile.Front()
+		if err != nil || len(hash) == 0 {
+			log.Fatal(" Erreur :" + " Acceder -> Variable " + ident + " non initialisée")
+		}
 		_, contains := hash[ident]
 		if contains {
 			return hash[ident], nil

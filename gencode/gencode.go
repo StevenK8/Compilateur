@@ -1,64 +1,108 @@
 package gencode
 
 import (
-	parser "Compilateur/parser"
+	"Compilateur/parser"
 	"fmt"
+	"log"
+	"sync"
 )
 
+type customQueue struct {
+	stack [][2]string
+	lock  sync.RWMutex
+}
+
+var pile customQueue
 var lblIncrementName = 1
-var listOfAssembleurInstructions []string
+var ListOfAssembleurInstructions []string
+
+func (c *customQueue) Push(name [2]string) {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+	c.stack = append(c.stack, name)
+}
+
+func (c *customQueue) Pop() error {
+	len := len(c.stack)
+	if len > 0 {
+		c.lock.Lock()
+		defer c.lock.Unlock()
+		c.stack = c.stack[:len-1]
+		return nil
+	}
+	return fmt.Errorf("Pop Error: Queue is empty")
+}
+
+func (c *customQueue) Front() ([2]string, error) {
+	len := len(c.stack)
+	if len > 0 {
+		c.lock.Lock()
+		defer c.lock.Unlock()
+		return c.stack[len-1], nil
+	}
+	var empty [2]string
+	return empty, fmt.Errorf("Peep Error: Queue is empty")
+}
+
+func (c *customQueue) Size() int {
+	return len(c.stack)
+}
+
+func (c *customQueue) Empty() bool {
+	return len(c.stack) == 0
+}
 
 func Gencode(Node parser.Noeud) {
 	switch Node.TypeDeNoeud {
 
 	case parser.NoeudConst:
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "push "+fmt.Sprint(Node.ValeurEntiere))
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "push "+fmt.Sprint(Node.ValeurEntiere))
 		break
 
 	case parser.NoeudAdd:
 		for _, n := range Node.Fils {
 			Gencode(n)
 		}
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "add")
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "add")
 		break
 
 	case parser.NoeudSub:
 		for _, n := range Node.Fils {
 			Gencode(n)
 		}
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "sub")
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "sub")
 		break
 
 	case parser.NoeudSubUnaire:
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "push 0")
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "push 0")
 		Gencode(Node.Fils[0])
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "sub")
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "sub")
 		break
 
 	case parser.NoeudMult:
 		for _, n := range Node.Fils {
 			Gencode(n)
 		}
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "mul")
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "mul")
 		break
 
 	case parser.NoeudDiv:
 		for _, n := range Node.Fils {
 			Gencode(n)
 		}
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "div")
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "div")
 		break
 
 	case parser.NoeudMod:
 		for _, n := range Node.Fils {
 			Gencode(n)
 		}
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "mod")
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "mod")
 		break
 
 	case parser.NoeudDebug:
 		Gencode(Node.Fils[0])
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "dbg")
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "dbg")
 		break
 
 	case parser.NoeudBlock:
@@ -69,28 +113,71 @@ func Gencode(Node parser.Noeud) {
 
 	case parser.NoeudDrop:
 		Gencode(Node.Fils[0])
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "drop")
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "drop")
 		break
 
 	case parser.NoeudTest:
-		label1 := "label" + fmt.Sprint(lblIncrementName)
+		label1 := "if" + fmt.Sprint(lblIncrementName)
 		lblIncrementName++
-		label2 := "label" + fmt.Sprint(lblIncrementName)
+		label2 := "if" + fmt.Sprint(lblIncrementName)
 		lblIncrementName++
 		Gencode(Node.Fils[0])
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "jumpf "+label1)
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jumpf "+label1)
 		Gencode(Node.Fils[1])
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "jump "+label2)
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "."+label1)
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+label2)
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+label1)
 		if len(Node.Fils) == 3 {
 			Gencode(Node.Fils[2])
 		}
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "."+label2)
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+label2)
+		break
+
+	case parser.NoeudAffect:
+		Gencode(Node.Fils[1])
+
+		slot := Node.Fils[0].Slot
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "dup")
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "set "+fmt.Sprint(slot))
+		break
+
+	case parser.NoeudRef:
+		slot := Node.Slot
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "get "+fmt.Sprint(slot))
+		break
+
+	case parser.NoeudLoop:
+		l1 := "loop" + fmt.Sprint(lblIncrementName)
+		lblIncrementName++
+		l2 := "loop" + fmt.Sprint(lblIncrementName)
+		lblIncrementName++
+		pile.Push([2]string{l1, l2})
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+l1)
+		Gencode(Node.Fils[0])
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+l1)
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+l2)
+		pile.Pop()
+		break
+
+	case parser.NoeudBreak:
+		l, err := pile.Front()
+		if err != nil {
+			log.Fatal(" Erreur : NoeudBreak")
+		}
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+l[1])
+		break
+
+	case parser.NoeudContinue:
+		l, err := pile.Front()
+		if err != nil {
+			log.Fatal(" Erreur : NoeudContinue")
+		}
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+l[0])
 		break
 	}
+
 }
 
 func Gen(Node parser.Noeud) []string {
 	Gencode(Node)
-	return listOfAssembleurInstructions
+	return ListOfAssembleurInstructions
 }

@@ -27,10 +27,13 @@ const (
 	RightBrace         = "Close_Brace" // }
 	PointVirgule       = "Semicolon"   // ;
 	Constant           = "Number"
-	Ident               = "Ident"
+	Ident              = "Ident"
 	KeywordIf          = "If"
 	KeywordElse        = "Else"
 	KeywordWhile       = "While"
+	KeywordFor         = "For"
+	KeywordBreak       = "Break"
+	KeywordContinue    = "Continue"
 	KeywordInt         = "int"
 	BooleanTrue        = "True"
 	BooleanFalse       = "False"

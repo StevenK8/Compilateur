@@ -40,6 +40,10 @@ const (
 	NoeudBlock typeNoeud = "NoeudBlock"
 	NoeudDrop  typeNoeud = "NoeudDrop"
 	NoeudTest  typeNoeud = "NoeudTest"
+
+	NoeudLoop     typeNoeud = "NoeudLoop"
+	NoeudBreak    typeNoeud = "NoeudBreak"
+	NoeudContinue typeNoeud = "NoeudContinue"
 )
 
 type operation struct {
@@ -236,18 +240,76 @@ func instruction() Noeud {
 			N = ajouterEnfant(N, I2)
 		}
 		return N
+
+	} else if verifier(token.KeywordWhile) {
+		accepter(token.ParentheseOuvrante)
+		E1 := expression(0)
+		accepter(token.ParentheseFermante)
+		I1 := instruction()
+		N := nouveauNoeud(NoeudLoop, courant().NbLigne)
+		T := nouveauNoeud(NoeudTest, courant().NbLigne)
+		B := nouveauNoeud(NoeudBreak, courant().NbLigne)
+		T = ajouterEnfant(T, E1, I1, B)
+		N = ajouterEnfant(N, T)
+		return N
+
+	} else if verifier(token.KeywordFor) {
+		accepter(token.ParentheseOuvrante)
+		E1 := expression(0)
+		accepter(token.PointVirgule)
+		E2 := expression(0)
+		accepter(token.PointVirgule)
+		E3 := expression(0)
+		accepter(token.ParentheseFermante)
+		I1 := instruction()
+
+		N := nouveauNoeud(NoeudBlock, courant().NbLigne)
+
+		D1 := nouveauNoeud(NoeudDrop, courant().NbLigne)
+		L := nouveauNoeud(NoeudLoop, courant().NbLigne)
+		N = ajouterEnfant(N, D1, L)
+
+		D1 = ajouterEnfant(D1, E1)
+		C := nouveauNoeud(NoeudTest, courant().NbLigne)
+		L = ajouterEnfant(L, C)
+
+		B2 := nouveauNoeud(NoeudBlock, courant().NbLigne)
+		BRAK := nouveauNoeud(NoeudBreak, courant().NbLigne)
+		C = ajouterEnfant(C, E2, B2, BRAK)
+
+		D2 := nouveauNoeud(NoeudDrop, courant().NbLigne)
+		B2 = ajouterEnfant(B2, I1, D2)
+
+		D2 = ajouterEnfant(D2, E3)
+
+		return N
+
 	} else if verifier(token.KeywordInt) {
 		N = nouveauNoeud(NoeudDec, courant().NbLigne)
 		N.ValeurString = courant().ValeurString
 		avancer()
 		accepter(token.PointVirgule)
 		return N
+
+	} else if verifier(token.KeywordBreak) {
+		N = nouveauNoeud(NoeudBreak, courant().NbLigne)
+		avancer()
+		accepter(token.PointVirgule)
+		return N
+
+	} else if verifier(token.KeywordContinue) {
+		N = nouveauNoeud(NoeudContinue, courant().NbLigne)
+		avancer()
+		accepter(token.PointVirgule)
+		return N
+
 	} else {
 		E1 := expression(0)
 		accepter(token.PointVirgule)
 		N = nouveauNoeud(NoeudDrop, courant().NbLigne)
 		N = ajouterEnfant(N, E1)
 		return N
+
 	}
 
 }
