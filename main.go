@@ -5,9 +5,10 @@ import (
 	"io/ioutil"
 	"strconv"
 
-	gencode "Compilateur/gencode"
-	lexer "Compilateur/lexer"
-	parser "Compilateur/parser"
+	"Compilateur/gencode"
+	"Compilateur/lexer"
+	"Compilateur/parser"
+	"Compilateur/semantique"
 )
 
 func main() {
@@ -24,6 +25,8 @@ func main() {
 	}
 
 	p := parser.Parser(tokenTab)
+	p = semantique.Sem(p)
+	parser.PrintNoeud(p, 0)
 	g := gencode.Gen(p)
 	for _, instruction := range g {
 		fmt.Println(instruction)

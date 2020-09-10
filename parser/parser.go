@@ -104,18 +104,18 @@ func Parser(afterLexer []token.Token) Noeud {
 	tokenTab = afterLexer
 	var mainNoeud Noeud = instruction()
 
-	printNoeud(mainNoeud, 0)
+	//PrintNoeud(mainNoeud, 0)
 	return mainNoeud
 }
 
-func printNoeud(N Noeud, decalage int) {
+func PrintNoeud(N Noeud, decalage int) {
 	var decal string
 	for i := 0; i < decalage; i++ {
 		decal += "\t"
 	}
-	fmt.Println(decal, "\\_", "Noeud : ", N.TypeDeNoeud, " - ", N.ValeurEntiere)
+	fmt.Println(decal, "\\_", "Noeud : ", N.TypeDeNoeud, " - ", N.ValeurEntiere, " - Slot : ", N.Slot)
 	for _, child := range N.Fils {
-		printNoeud(child, decalage+1)
+		PrintNoeud(child, decalage+1)
 	}
 }
 
@@ -180,6 +180,7 @@ func atome() Noeud {
 	} else if courant().DataType == token.Ident {
 		N = nouveauNoeud(NoeudRef, courant().NbLigne)
 		N.ValeurString = courant().ValeurString
+		avancer()
 		return N
 	}
 
@@ -238,6 +239,7 @@ func instruction() Noeud {
 	} else if verifier(token.KeywordInt) {
 		N = nouveauNoeud(NoeudDec, courant().NbLigne)
 		N.ValeurString = courant().ValeurString
+		avancer()
 		accepter(token.PointVirgule)
 		return N
 	} else {

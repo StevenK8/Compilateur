@@ -8,7 +8,7 @@ import (
 )
 
 type Symbol struct {
-	Identifiant int
+	Identifiant string
 	Type        string
 	Slot        int
 }
@@ -59,30 +59,30 @@ var pile customQueue
 
 // var pile []map[string]Symbol
 
-func Sem(N parser.Noeud) {
+func Sem(N parser.Noeud) parser.Noeud {
 	switch N.TypeDeNoeud {
 	default:
-		for _, Fils := range N.Fils {
-			Sem(Fils)
+		for i, Fils := range N.Fils {
+			N.Fils[i] = Sem(Fils)
 		}
 		break
 
 	case parser.NoeudBlock:
 		DebutBlock()
-		for _, Fils := range N.Fils {
-			Sem(Fils)
+		for i, Fils := range N.Fils {
+			N.Fils[i] = Sem(Fils)
 		}
 		FinBlock()
 		break
 
 	case parser.NoeudDec:
-		S, err := Declarer(N.ValeurString)
+		_, err := Declarer(N.ValeurString)
 		if err != nil {
 			log.Fatal(" Erreur : Declarer")
 			break
 		}
-		S.Type = "Variable"
-		S.Slot = NbSlot
+		// S.Type = "variable"
+		// S.Slot = NbSlot
 		NbSlot++
 		break
 
@@ -93,7 +93,7 @@ func Sem(N parser.Noeud) {
 			break
 		}
 		if S.Type != "variable" {
-			log.Fatal(" Erreur : variable attendue, ", S.Type, " trouvé.")
+			log.Fatal(" Erreur semantique : variable attendue, ", S.Type, " trouvé.")
 			break
 		} else {
 			N.Slot = S.Slot
@@ -101,10 +101,11 @@ func Sem(N parser.Noeud) {
 		break
 
 	}
+	return N
 }
 
 func DebutBlock() {
-	var NouvelleHashMap map[string]Symbol
+	NouvelleHashMap := make(map[string]Symbol)
 	pile.Push(NouvelleHashMap)
 }
 
@@ -118,14 +119,14 @@ func Declarer(ident string) (Symbol, error) {
 		log.Fatal(" Erreur top")
 	}
 	_, contains := top[ident]
-	if !contains {
-		log.Fatal(" Erreur " + ident + " pas sur la pile")
+	if contains {
+		log.Fatal(" Erreur " + ident + " déjà sur la pile")
 	} else {
-		S := NouveauSymbole()
+		S := Symbol{ident, "variable", NbSlot}
 		top[ident] = S
 		return S, nil
 	}
-	return Symbol{0, "", 0}, fmt.Errorf("Already exists")
+	return Symbol{"", "", 0}, fmt.Errorf("Already exists")
 
 }
 
@@ -137,9 +138,9 @@ func Acceder(ident string) (Symbol, error) {
 			return hash[ident], nil
 		}
 	}
-	return Symbol{0, "", 0}, fmt.Errorf("Not found")
+	return Symbol{"", "", 0}, fmt.Errorf("Not found")
 }
 
 func NouveauSymbole() Symbol {
-	return Symbol{0, "", 0}
+	return Symbol{}
 }
