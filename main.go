@@ -10,6 +10,7 @@ import (
 	"strconv"
 
 	//"Compilateur/gencode"
+	"Compilateur/gencode"
 	"Compilateur/lexer"
 	"Compilateur/parser"
 	"Compilateur/semantique"
@@ -29,10 +30,9 @@ func main() {
 	}
 
 	p := parser.Parser(tokenTab)
-	parser.PrintNoeud(p, 0)
 	p = semantique.Sem(p)
-	//parser.PrintNoeud(p, 0)
-	/*
+	parser.PrintNoeud(p, 0)
+
 	gencode.ListOfAssembleurInstructions = append(gencode.ListOfAssembleurInstructions, ".start")
 	gencode.ListOfAssembleurInstructions = append(gencode.ListOfAssembleurInstructions, "resn "+fmt.Sprint(semantique.NbSlot))
 
@@ -40,6 +40,5 @@ func main() {
 	for _, instruction := range g {
 		fmt.Println(instruction)
 	}
-	*/
 
 }

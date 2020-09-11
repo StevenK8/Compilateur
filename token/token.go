@@ -26,6 +26,7 @@ const (
 	LeftBrace          = "Open_Brace"  // {
 	RightBrace         = "Close_Brace" // }
 	PointVirgule       = "Semicolon"   // ;
+	Virgule            = "Virgule"     // ,
 	Constant           = "Number"
 	Ident              = "Ident"
 	KeywordIf          = "If"

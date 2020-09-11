@@ -87,7 +87,7 @@ func Sem(N parser.Noeud) parser.Noeud {
 	case parser.NoeudRef:
 		S, err := Acceder(N.ValeurString)
 		if err != nil {
-			log.Fatal(" Erreur : Acceder")
+			log.Fatal(" Erreur :" + " Acceder -> Variable " + N.ValeurString + " non initialisée")
 			break
 		}
 		if S.Type != "variable" {
@@ -129,11 +129,7 @@ func Declarer(ident string) (Symbol, error) {
 }
 
 func Acceder(ident string) (Symbol, error) {
-	for pile.Size() > 0 {
-		hash, err := pile.Front()
-		if err != nil || len(hash) == 0 {
-			log.Fatal(" Erreur :" + " Acceder -> Variable " + ident + " non initialisée")
-		}
+	for _, hash := range pile.stack {
 		_, contains := hash[ident]
 		if contains {
 			return hash[ident], nil

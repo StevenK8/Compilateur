@@ -163,6 +163,10 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 		dataType = token.PointVirgule
 		break
 
+	case ",":
+		dataType = token.Virgule
+		break
+
 	case "<":
 		dataType = token.LessThan
 		break
