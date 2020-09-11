@@ -44,6 +44,9 @@ const (
 	NoeudLoop     typeNoeud = "NoeudLoop"
 	NoeudBreak    typeNoeud = "NoeudBreak"
 	NoeudContinue typeNoeud = "NoeudContinue"
+
+	NoeudAppel    typeNoeud = "NoeudAppel"
+	NoeudFonction typeNoeud = "NoeudFonction"
 )
 
 type operation struct {
@@ -87,7 +90,7 @@ func getPrio(typeWanted token.TokenType) operation {
 		}
 	}
 
-	log.Fatal("[ Line ", courant().NbLigne, " ] Erreur : operateur ", typeWanted, " non trouvé.")
+	log.Fatal("[ Line ", Courant().NbLigne, " ] Erreur : operateur ", typeWanted, " non trouvé.")
 	return operation{"", 0, 0, ""}
 }
 
@@ -103,10 +106,15 @@ type Noeud struct {
 var tokenTab []token.Token
 var posToken int
 
+// Init : Initialise la liste
+func Init(afterLexer []token.Token){
+	tokenTab = afterLexer
+}
+
 // Parser : Main function of this package
 func Parser(afterLexer []token.Token) Noeud {
 	tokenTab = afterLexer
-	var mainNoeud Noeud = instruction()
+	var mainNoeud Noeud = Fonction()
 
 	//PrintNoeud(mainNoeud, 0)
 	return mainNoeud
@@ -127,7 +135,7 @@ func avancer() {
 	posToken++
 }
 
-func courant() token.Token {
+func Courant() token.Token {
 	if posToken < len(tokenTab) {
 		return tokenTab[posToken]
 	}
@@ -142,7 +150,7 @@ func ajouterEnfant(parent Noeud, childs ...Noeud) Noeud {
 }
 
 func verifier(typeCheck token.TokenType) bool {
-	if courant().DataType == typeCheck {
+	if Courant().DataType == typeCheck {
 		avancer()
 		return true
 	}
@@ -150,8 +158,8 @@ func verifier(typeCheck token.TokenType) bool {
 }
 
 func accepter(typeCheck token.TokenType) {
-	if courant().DataType != typeCheck {
-		log.Fatal("[ Line ", courant().NbLigne, " ] Erreur accepter : type - ", typeCheck, " attendu, ", courant().DataType, " reçu.")
+	if Courant().DataType != typeCheck {
+		log.Fatal("[ Line ", Courant().NbLigne, " ] Erreur accepter : type - ", typeCheck, " attendu, ", Courant().DataType, " reçu.")
 	}
 	avancer()
 }
@@ -167,43 +175,56 @@ func atome() Noeud {
 		accepter(token.ParentheseFermante)
 		return N
 	} else if verifier(token.OperatorMinus) {
-		N = nouveauNoeud(NoeudSubUnaire, courant().NbLigne)
+		N = nouveauNoeud(NoeudSubUnaire, Courant().NbLigne)
 		A := expression(getPrio(token.MinusUnaire).prioD)
 		N = ajouterEnfant(N, A)
 		return N
 	} else if verifier(token.Not) {
-		N = nouveauNoeud(NoeudNot, courant().NbLigne)
+		N = nouveauNoeud(NoeudNot, Courant().NbLigne)
 		A := expression(getPrio(token.Not).prioD)
 		N = ajouterEnfant(N, A)
 		return N
-	} else if courant().DataType == token.Constant {
-		N = nouveauNoeud(NoeudConst, courant().NbLigne)
-		N.ValeurEntiere = courant().ValeurInt
+	} else if Courant().DataType == token.Constant {
+		N = nouveauNoeud(NoeudConst, Courant().NbLigne)
+		N.ValeurEntiere = Courant().ValeurInt
 		avancer()
 		return N
-	} else if courant().DataType == token.Ident {
-		N = nouveauNoeud(NoeudRef, courant().NbLigne)
-		N.ValeurString = courant().ValeurString
+	} else if Courant().DataType == token.Ident {
+		T := Courant()
 		avancer()
-		return N
+		if verifier(token.ParentheseOuvrante) {
+			N = nouveauNoeud(NoeudAppel, T.NbLigne)
+			N.ValeurString = T.ValeurString
+			for Courant().DataType != token.ParentheseFermante {
+				if !verifier(token.Virgule) {
+					break
+				}
+			}
+			accepter(token.ParentheseFermante)
+			return N
+		} else {
+			N = nouveauNoeud(NoeudRef, T.NbLigne)
+			N.ValeurString = T.ValeurString
+			return N
+		}
 	}
 
-	log.Fatal("[ Line ", courant().NbLigne, " ] Erreur : atome - ", token.Constant, " attendu, ", courant().DataType, " reçu.")
+	log.Fatal("[ Line ", Courant().NbLigne, " ] Erreur : atome - ", token.Constant, " attendu, ", Courant().DataType, " reçu.")
 	return N
 }
 
 func expression(prioMin int) Noeud {
 	var N Noeud = atome()
-	if estPrio(courant().DataType) {
-		for getPrio(courant().DataType).prioG > prioMin {
-			var op operation = getPrio(courant().DataType)
-			var line int = courant().NbLigne
+	if estPrio(Courant().DataType) {
+		for getPrio(Courant().DataType).prioG > prioMin {
+			var op operation = getPrio(Courant().DataType)
+			var line int = Courant().NbLigne
 			avancer()
 			var A Noeud = expression(op.prioD)
 			var T Noeud = nouveauNoeud(op.typeOfNoeud, line)
 			T = ajouterEnfant(T, N, A)
 			N = T
-			if !estPrio(courant().DataType) {
+			if !estPrio(Courant().DataType) {
 				break
 			}
 		}
@@ -217,12 +238,12 @@ func instruction() Noeud {
 	if verifier(token.Debug) {
 		E := expression(0)
 		accepter(token.PointVirgule)
-		N = nouveauNoeud(NoeudDebug, courant().NbLigne)
+		N = nouveauNoeud(NoeudDebug, Courant().NbLigne)
 		N = ajouterEnfant(N, E)
 		return N
 
 	} else if verifier(token.LeftBrace) {
-		N = nouveauNoeud(NoeudBlock, courant().NbLigne)
+		N = nouveauNoeud(NoeudBlock, Courant().NbLigne)
 		for !verifier(token.RightBrace) {
 			N = ajouterEnfant(N, instruction())
 		}
@@ -233,7 +254,7 @@ func instruction() Noeud {
 		E1 := expression(0)
 		accepter(token.ParentheseFermante)
 		I1 := instruction()
-		N = nouveauNoeud(NoeudTest, courant().NbLigne)
+		N = nouveauNoeud(NoeudTest, Courant().NbLigne)
 		N = ajouterEnfant(N, E1, I1)
 		if verifier(token.KeywordElse) {
 			I2 := instruction()
@@ -246,9 +267,9 @@ func instruction() Noeud {
 		E1 := expression(0)
 		accepter(token.ParentheseFermante)
 		I1 := instruction()
-		N := nouveauNoeud(NoeudLoop, courant().NbLigne)
-		T := nouveauNoeud(NoeudTest, courant().NbLigne)
-		B := nouveauNoeud(NoeudBreak, courant().NbLigne)
+		N := nouveauNoeud(NoeudLoop, Courant().NbLigne)
+		T := nouveauNoeud(NoeudTest, Courant().NbLigne)
+		B := nouveauNoeud(NoeudBreak, Courant().NbLigne)
 		T = ajouterEnfant(T, E1, I1, B)
 		N = ajouterEnfant(N, T)
 		return N
@@ -263,21 +284,21 @@ func instruction() Noeud {
 		accepter(token.ParentheseFermante)
 		I1 := instruction()
 
-		N := nouveauNoeud(NoeudBlock, courant().NbLigne)
+		N := nouveauNoeud(NoeudBlock, Courant().NbLigne)
 
-		D1 := nouveauNoeud(NoeudDrop, courant().NbLigne)
-		L := nouveauNoeud(NoeudLoop, courant().NbLigne)
+		D1 := nouveauNoeud(NoeudDrop, Courant().NbLigne)
+		L := nouveauNoeud(NoeudLoop, Courant().NbLigne)
 		N = ajouterEnfant(N, D1, L)
 
 		D1 = ajouterEnfant(D1, E1)
-		C := nouveauNoeud(NoeudTest, courant().NbLigne)
+		C := nouveauNoeud(NoeudTest, Courant().NbLigne)
 		L = ajouterEnfant(L, C)
 
-		B2 := nouveauNoeud(NoeudBlock, courant().NbLigne)
-		BRAK := nouveauNoeud(NoeudBreak, courant().NbLigne)
+		B2 := nouveauNoeud(NoeudBlock, Courant().NbLigne)
+		BRAK := nouveauNoeud(NoeudBreak, Courant().NbLigne)
 		C = ajouterEnfant(C, E2, B2, BRAK)
 
-		D2 := nouveauNoeud(NoeudDrop, courant().NbLigne)
+		D2 := nouveauNoeud(NoeudDrop, Courant().NbLigne)
 		B2 = ajouterEnfant(B2, I1, D2)
 
 		D2 = ajouterEnfant(D2, E3)
@@ -285,20 +306,20 @@ func instruction() Noeud {
 		return N
 
 	} else if verifier(token.KeywordInt) {
-		N = nouveauNoeud(NoeudDec, courant().NbLigne)
-		N.ValeurString = courant().ValeurString
+		N = nouveauNoeud(NoeudDec, Courant().NbLigne)
+		N.ValeurString = Courant().ValeurString
 		avancer()
 		accepter(token.PointVirgule)
 		return N
 
 	} else if verifier(token.KeywordBreak) {
-		N = nouveauNoeud(NoeudBreak, courant().NbLigne)
+		N = nouveauNoeud(NoeudBreak, Courant().NbLigne)
 		avancer()
 		accepter(token.PointVirgule)
 		return N
 
 	} else if verifier(token.KeywordContinue) {
-		N = nouveauNoeud(NoeudContinue, courant().NbLigne)
+		N = nouveauNoeud(NoeudContinue, Courant().NbLigne)
 		avancer()
 		accepter(token.PointVirgule)
 		return N
@@ -306,10 +327,30 @@ func instruction() Noeud {
 	} else {
 		E1 := expression(0)
 		accepter(token.PointVirgule)
-		N = nouveauNoeud(NoeudDrop, courant().NbLigne)
+		N = nouveauNoeud(NoeudDrop, Courant().NbLigne)
 		N = ajouterEnfant(N, E1)
 		return N
 
 	}
 
+}
+
+//Fonction : Point d'entrée au parser
+func Fonction() Noeud {
+	accepter(token.KeywordInt)
+	T := Courant()
+	accepter(token.Ident)
+	N := nouveauNoeud(NoeudFonction, Courant().NbLigne)
+	N.ValeurString = T.ValeurString
+	accepter(token.ParentheseOuvrante)
+
+	for Courant().DataType != token.ParentheseFermante {
+		N = ajouterEnfant(N, instruction())
+		if !verifier(token.Virgule) {
+			break
+		}
+	}
+	avancer()
+	N = ajouterEnfant(N, instruction())
+	return N
 }

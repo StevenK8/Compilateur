@@ -74,7 +74,7 @@ func Sem(N parser.Noeud) parser.Noeud {
 		break
 
 	case parser.NoeudDec:
-		_, err := Declarer(N.ValeurString)
+		_, err := Declarer(N.ValeurString, "variable")
 		if err != nil {
 			log.Fatal(" Erreur : Declarer")
 			break
@@ -87,14 +87,45 @@ func Sem(N parser.Noeud) parser.Noeud {
 	case parser.NoeudRef:
 		S, err := Acceder(N.ValeurString)
 		if err != nil {
-			log.Fatal(" Erreur :" + " Acceder -> Variable " + N.ValeurString + " non initialisée")
+			log.Fatal(" [ Line ", N.NbLigne, " ]  Erreur :"+" Acceder -> Variable "+N.ValeurString+" non initialisée")
 			break
 		}
 		if S.Type != "variable" {
-			log.Fatal(" Erreur semantique : variable attendue, ", S.Type, " trouvé.")
+			log.Fatal(" [ Line ", N.NbLigne, " ]  Erreur semantique : variable attendue, ", S.Type, " trouvé.")
 			break
 		} else {
 			N.Slot = S.Slot
+		}
+		break
+
+	case parser.NoeudFonction:
+		NbSlot = 0
+		DebutBlock()
+		_, err := Declarer(N.ValeurString, "fonction")
+		if err != nil {
+			log.Fatal(" Erreur : Declarer")
+			break
+		}
+
+		for i, Fils := range N.Fils {
+			N.Fils[i] = Sem(Fils)
+		}
+		FinBlock()
+		N.Slot = NbSlot
+		break
+
+	case parser.NoeudAppel:
+		S, err := Acceder(N.ValeurString)
+		if err != nil {
+			log.Fatal(" [ Line ", N.NbLigne, " ] Erreur :"+" Acceder -> Fonction "+N.ValeurString+" non initialisée")
+			break
+		}
+		if S.Type != "fonction" {
+			log.Fatal(" Erreur : Pas une fonction")
+			break
+		}
+		for i, Fils := range N.Fils {
+			N.Fils[i] = Sem(Fils)
 		}
 		break
 
@@ -111,7 +142,7 @@ func FinBlock() {
 	pile.Pop()
 }
 
-func Declarer(ident string) (Symbol, error) {
+func Declarer(ident string, typeSymbol string) (Symbol, error) {
 	top, err := pile.Front()
 	if err != nil {
 		log.Fatal(" Erreur top")
@@ -120,7 +151,7 @@ func Declarer(ident string) (Symbol, error) {
 	if contains {
 		log.Fatal(" Erreur " + ident + " déjà sur la pile")
 	} else {
-		S := Symbol{ident, "variable", NbSlot}
+		S := Symbol{ident, typeSymbol, NbSlot}
 		top[ident] = S
 		return S, nil
 	}

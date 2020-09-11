@@ -9,11 +9,11 @@ import (
 	"io/ioutil"
 	"strconv"
 
-	//"Compilateur/gencode"
 	"Compilateur/gencode"
 	"Compilateur/lexer"
 	"Compilateur/parser"
 	"Compilateur/semantique"
+	"Compilateur/token"
 )
 
 func main() {
@@ -29,16 +29,22 @@ func main() {
 		fmt.Println(strconv.Itoa(a.NbLigne) + " \t[" + string(a.ValeurString) + "]\t" + string(a.DataType))
 	}
 
-	p := parser.Parser(tokenTab)
-	p = semantique.Sem(p)
-	parser.PrintNoeud(p, 0)
+	semantique.DebutBlock()
+	parser.Init(tokenTab)
 
 	gencode.ListOfAssembleurInstructions = append(gencode.ListOfAssembleurInstructions, ".start")
 	gencode.ListOfAssembleurInstructions = append(gencode.ListOfAssembleurInstructions, "resn "+fmt.Sprint(semantique.NbSlot))
 
-	g := gencode.Gen(p)
-	for _, instruction := range g {
-		fmt.Println(instruction)
+	var g []string
+
+	for parser.Courant().DataType != token.EOF {
+		N := parser.Fonction()
+		parser.PrintNoeud(N, 0)
+		N = semantique.Sem(N)
+		for _, tab := range gencode.Gen(N) {
+			g = append(g, tab)
+		}
 	}
 
+	fmt.Println(g)
 }
