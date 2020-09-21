@@ -30,7 +30,7 @@ jobs:
         fi
         
     - name: Setup Gopath
-      run: GOPATH=/opt/hostedtoolcache/go/1.15.0/x64/ && go env
+      run: export GOPATH=/opt/hostedtoolcache/go/1.15.0/x64/ && go env
       
 
     - name: Build
