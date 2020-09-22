@@ -32,8 +32,7 @@ func main() {
 	semantique.DebutBlock()
 	parser.Init(tokenTab)
 
-	gencode.ListOfAssembleurInstructions = append(gencode.ListOfAssembleurInstructions, ".start")
-	gencode.ListOfAssembleurInstructions = append(gencode.ListOfAssembleurInstructions, "resn "+fmt.Sprint(semantique.NbSlot))
+	gencode.ListOfAssembleurInstructions = append(gencode.ListOfAssembleurInstructions, ".start", "resn "+fmt.Sprint(semantique.NbSlot))
 
 	var g []string
 
