@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	token "Compilateur/token"
+	token "github.com/StevenK8/Compilateur/token"
 )
 
 type typeNoeud string
@@ -107,7 +107,7 @@ var tokenTab []token.Token
 var posToken int
 
 // Init : Initialise la liste
-func Init(afterLexer []token.Token){
+func Init(afterLexer []token.Token) {
 	tokenTab = afterLexer
 }
 

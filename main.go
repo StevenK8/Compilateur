@@ -9,11 +9,11 @@ import (
 	"io/ioutil"
 	"strconv"
 
-	"Compilateur/gencode"
-	"Compilateur/lexer"
-	"Compilateur/parser"
-	"Compilateur/semantique"
-	"Compilateur/token"
+	"github.com/StevenK8/Compilateur/gencode"
+	"github.com/StevenK8/Compilateur/lexer"
+	"github.com/StevenK8/Compilateur/parser"
+	"github.com/StevenK8/Compilateur/semantique"
+	"github.com/StevenK8/Compilateur/token"
 )
 
 func main() {

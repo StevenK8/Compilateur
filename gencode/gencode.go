@@ -1,7 +1,7 @@
 package gencode
 
 import (
-	"Compilateur/parser"
+	"github.com/StevenK8/Compilateur/parser"
 	"fmt"
 	"log"
 	"sync"

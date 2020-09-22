@@ -1,7 +1,7 @@
 package parser
 
 import (
-	lexer "Compilateur/lexer"
+	lexer "github.com/StevenK8/Compilateur/lexer"
 	"fmt"
 	"testing"
 )

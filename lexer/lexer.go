@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strconv"
 
-	token "Compilateur/token"
+	token "github.com/StevenK8/Compilateur/token"
 )
 
 func Lexer(data []byte) []token.Token {

@@ -1,7 +1,7 @@
 package semantique
 
 import (
-	parser "Compilateur/parser"
+	parser "github.com/StevenK8/Compilateur/parser"
 	"fmt"
 	"log"
 	"sync"
