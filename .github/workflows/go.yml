@@ -28,6 +28,10 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
+        
+    - name: Setup Gopath
+      run: export GOPATH=/opt/hostedtoolcache/go/1.15.0/x64/ && go env
+      
 
     - name: Build
       run: go build -v .
