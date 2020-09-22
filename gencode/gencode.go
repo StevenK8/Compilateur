@@ -1,8 +1,8 @@
 package gencode
 
 import (
-	"github.com/StevenK8/Compilateur/parser"
 	"fmt"
+	"github.com/StevenK8/Compilateur/parser"
 	"log"
 	"sync"
 )
@@ -124,8 +124,7 @@ func Gencode(Node parser.Noeud) {
 		Gencode(Node.Fils[0])
 		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jumpf "+label1)
 		Gencode(Node.Fils[1])
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+label2)
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+label1)
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+label2, "."+label1)
 		if len(Node.Fils) == 3 {
 			Gencode(Node.Fils[2])
 		}
@@ -136,8 +135,7 @@ func Gencode(Node parser.Noeud) {
 		Gencode(Node.Fils[1])
 
 		slot := Node.Fils[0].Slot
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "dup")
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "set "+fmt.Sprint(slot))
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "dup", "set "+fmt.Sprint(slot))
 		break
 
 	case parser.NoeudRef:
@@ -153,8 +151,7 @@ func Gencode(Node parser.Noeud) {
 		pile.Push([2]string{l1, l2})
 		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+l1)
 		Gencode(Node.Fils[0])
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+l1)
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+l2)
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+l1, "."+l2)
 		pile.Pop()
 		break
 
