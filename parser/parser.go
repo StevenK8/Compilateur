@@ -143,9 +143,7 @@ func Courant() token.Token {
 }
 
 func ajouterEnfant(parent Noeud, childs ...Noeud) Noeud {
-	for _, child := range childs {
-		parent.Fils = append(parent.Fils, child)
-	}
+	parent.Fils = append(parent.Fils, childs...)
 	return parent
 }
 

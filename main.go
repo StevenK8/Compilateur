@@ -40,9 +40,7 @@ func main() {
 		N := parser.Fonction()
 		parser.PrintNoeud(N, 0)
 		N = semantique.Sem(N)
-		for _, tab := range gencode.Gen(N) {
-			g = append(g, tab)
-		}
+		g = append(g, gencode.Gen(N)...)
 	}
 
 	fmt.Println(g)
