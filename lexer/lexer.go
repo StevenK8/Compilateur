@@ -225,8 +225,7 @@ func getIdent(data []byte, charPos int) (token.TokenType, int) {
 }
 
 func getNumber(data []byte, charPos int) (token.TokenType, int) {
-	var dataType token.TokenType
-	dataType = token.Constant
+	var dataType token.TokenType = token.Constant
 	var longueur int
 
 	if !checkMatchChar(`[0-9]`, string(data[charPos])) {
