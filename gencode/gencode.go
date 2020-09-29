@@ -2,9 +2,10 @@ package gencode
 
 import (
 	"fmt"
-	"github.com/StevenK8/Compilateur/parser"
 	"log"
 	"sync"
+
+	"github.com/StevenK8/Compilateur/parser"
 )
 
 type customQueue struct {
@@ -170,6 +171,21 @@ func Gencode(Node parser.Noeud) {
 		}
 		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+l[0])
 		break
+
+	case parser.NoeudFonction:
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+Node.ValeurString, "resn "+fmt.Sprint(Node.Slot-(len(Node.Fils)-1)))
+		Gencode(Node.Fils[len(Node.Fils)-1])
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "push 0", "ret")
+		break
+
+	case parser.NoeudAppel:
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "prep "+Node.ValeurString)
+		for _, n := range Node.Fils {
+			Gencode(n)
+		}
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "call "+fmt.Sprint(len(Node.Fils)))
+		break
+
 	}
 
 }
