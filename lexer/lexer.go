@@ -1,6 +1,7 @@
 package lexer
 
 import (
+	"log"
 	"regexp"
 	"strconv"
 
@@ -14,13 +15,7 @@ func Lexer(data []byte) []token.Token {
 
 	for charPos := 0; charPos < len(data); charPos++ {
 
-		currentChar := string(data[charPos])
-
-		changeLine, err := regexp.MatchString(`\n`, currentChar)
-		if err != nil {
-			println(err)
-		}
-		if changeLine {
+		if checkMatchChar(`\n`, string(data[charPos])) {
 			numOfLine++
 		}
 
@@ -37,10 +32,12 @@ func Lexer(data []byte) []token.Token {
 }
 
 func checkMatchChar(regex string, char string) bool {
-	matched, err := regexp.MatchString(regex, char)
+	r, err := regexp.Compile(regex)
 	if err != nil {
-		println(err)
+		log.Fatal(err)
 	}
+
+	matched := r.MatchString(char)
 
 	return matched
 }
