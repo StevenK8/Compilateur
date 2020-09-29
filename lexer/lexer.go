@@ -60,7 +60,6 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.Increment
 			}
 		}
-		break
 
 	case "-":
 		dataType = token.OperatorMinus
@@ -70,7 +69,6 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.EqualSub
 			}
 		}
-		break
 
 	case "*":
 		dataType = token.OperatorMult
@@ -83,7 +81,6 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.Pow
 			}
 		}
-		break
 
 	case "/":
 		dataType = token.OperatorDiv
@@ -93,7 +90,6 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.EqualDiv
 			}
 		}
-		break
 
 	case "%":
 		dataType = token.OperatorMod
@@ -103,7 +99,6 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.EqualMod
 			}
 		}
-		break
 
 	case "=":
 		dataType = token.Equal
@@ -113,7 +108,6 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.Equalequal
 			}
 		}
-		break
 
 	case "!":
 		dataType = token.Not
@@ -123,7 +117,6 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.NotEqual
 			}
 		}
-		break
 
 	case "&":
 		if charPos < len(data)-1 {
@@ -132,7 +125,6 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.And
 			}
 		}
-		break
 
 	case "|":
 		if charPos < len(data)-1 {
@@ -141,42 +133,33 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 				dataType = token.Or
 			}
 		}
-		break
 
 	case "(":
 		dataType = token.ParentheseOuvrante
-		break
 
 	case ")":
 		dataType = token.ParentheseFermante
-		break
 
 	case "{":
 		dataType = token.LeftBrace
-		break
 
 	case "}":
 		dataType = token.RightBrace
-		break
 
 	case ";":
 		dataType = token.PointVirgule
-		break
 
 	case ",":
 		dataType = token.Virgule
-		break
 
 	case "<":
 		dataType = token.LessThan
-		break
 
 	case ">":
 		dataType = token.GreaterThan
-		break
+
 	default:
 		return getIdent(data, charPos)
-		break
 
 	}
 	return dataType, longueur
