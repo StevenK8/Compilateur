@@ -96,7 +96,7 @@ func Gencode(Node parser.Noeud) {
 
 	case parser.NoeudDebug:
 		Gencode(Node.Fils[0])
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "dbg")
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "send")
 
 	case parser.NoeudBlock:
 		for _, n := range Node.Fils {

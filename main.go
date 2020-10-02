@@ -34,9 +34,9 @@ func main() {
 	semantique.DebutBlock()
 	parser.Init(tokenTab)
 
-	gencode.ListOfAssembleurInstructions = append(gencode.ListOfAssembleurInstructions, ".start", "resn "+fmt.Sprint(semantique.NbSlot))
-
 	var g []string
+
+	g = append(g, ".start", "resn "+fmt.Sprint(semantique.NbSlot))
 
 	for parser.Courant().DataType != token.EOF {
 		N := parser.Fonction()
@@ -44,6 +44,8 @@ func main() {
 		N = semantique.Sem(N)
 		g = append(g, gencode.Gen(N)...)
 	}
+
+	g = append(g, "halt")
 
 	f, err := os.Create("test.out")
 
