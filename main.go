@@ -7,6 +7,8 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
 	"strconv"
 
 	"github.com/StevenK8/Compilateur/gencode"
@@ -43,5 +45,19 @@ func main() {
 		g = append(g, gencode.Gen(N)...)
 	}
 
-	fmt.Println(g)
+	f, err := os.Create("test.out")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer f.Close()
+
+	for _, gen := range g {
+		_, err = f.WriteString(gen + "\n")
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
 }
