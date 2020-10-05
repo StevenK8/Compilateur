@@ -11,6 +11,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/StevenK8/Compilateur/gencode"
 	"github.com/StevenK8/Compilateur/lexer"
@@ -58,7 +59,7 @@ func main() {
 
 	g = append(g, "halt")
 
-	f, err := os.Create("test.out")
+	f, err := os.Create(strings.Split(*fileName, ".")[0] + ".out")
 
 	if err != nil {
 		log.Fatal(err)
