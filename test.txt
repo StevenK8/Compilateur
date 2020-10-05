@@ -1,4 +1,4 @@
-{
+int main(){
     int a;
     int b;
 
@@ -8,4 +8,6 @@
     while(a<10){
         a = a + b;
     }
+
+    debug 1;
 }

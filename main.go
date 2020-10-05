@@ -5,6 +5,7 @@ package main
 */
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -19,10 +20,20 @@ import (
 )
 
 func main() {
+	fileName := flag.String("file", "", "path of input file")
+	boolPtr := flag.Bool("h", false, "a bool")
 
-	data, err := ioutil.ReadFile("test.txt")
+	flag.Parse()
+
+	if *boolPtr || *fileName == "" {
+		fmt.Println("Utilisation du Compilateur:\n" +
+			"./Compilateur -file='test.txt'")
+		os.Exit(0)
+	}
+
+	data, err := ioutil.ReadFile(*fileName)
 	if err != nil {
-		fmt.Println("File reading error", err)
+		fmt.Println("File reading error:", err)
 		return
 	}
 
