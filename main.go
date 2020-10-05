@@ -22,13 +22,14 @@ import (
 
 func main() {
 	fileName := flag.String("file", "", "path of input file")
+	fileNameOut := flag.String("o", "", "path of output file")
 	boolPtr := flag.Bool("h", false, "a bool")
 
 	flag.Parse()
 
 	if *boolPtr || *fileName == "" {
 		fmt.Println("Utilisation du Compilateur:\n" +
-			"./Compilateur -file='test.txt'")
+			"./Compilateur -file='test.txt' -o 'test.out'")
 		os.Exit(0)
 	}
 
@@ -59,7 +60,14 @@ func main() {
 
 	g = append(g, "halt")
 
-	f, err := os.Create(strings.Split(*fileName, ".")[0] + ".out")
+	var outPath string
+	if *fileNameOut == "" {
+		outPath = strings.Split(*fileName, ".")[0] + ".out"
+	} else {
+		outPath = *fileNameOut
+	}
+
+	f, err := os.Create(outPath)
 
 	if err != nil {
 		log.Fatal(err)
