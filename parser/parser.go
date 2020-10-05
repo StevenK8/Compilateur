@@ -110,6 +110,7 @@ var posToken int
 // Init : Initialise la liste
 func Init(afterLexer []token.Token) {
 	tokenTab = afterLexer
+	posToken = 0
 }
 
 // Parser : Main function of this package
@@ -208,7 +209,7 @@ func atome() Noeud {
 		}
 	}
 
-	log.Fatal("[ Line ", Courant().NbLigne, " ] Erreur : atome - ", token.Constant, " attendu, ", Courant().DataType, " reçu.")
+	log.Fatal("[ Line ", Courant().NbLigne, ", Pos ", posToken, " ] Erreur : atome - ", token.Constant, " attendu, ", Courant().DataType, " reçu.")
 	return N
 }
 
@@ -351,7 +352,15 @@ func Fonction() Noeud {
 	accepter(token.ParentheseOuvrante)
 
 	for Courant().DataType != token.ParentheseFermante {
-		N = ajouterEnfant(N, instruction())
+		if verifier(token.KeywordInt) {
+			temp := Courant()
+			accepter(token.Ident)
+			D := nouveauNoeud(NoeudDec, temp.NbLigne)
+			D.ValeurString = temp.ValeurString
+			N = ajouterEnfant(N, D)
+		} else {
+			N = ajouterEnfant(N, expression(0))
+		}
 		if !verifier(token.Virgule) {
 			break
 		}

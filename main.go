@@ -39,23 +39,15 @@ func main() {
 		return
 	}
 
-	tokenTab := lexer.Lexer(data)
-	for _, a := range tokenTab {
-		fmt.Println(strconv.Itoa(a.NbLigne) + " \t[" + string(a.ValeurString) + "]\t" + string(a.DataType))
+	runtime, err := ioutil.ReadFile("runtime.h")
+	if err != nil {
+		fmt.Println("Runtime reading error:", err)
+		return
 	}
 
-	semantique.DebutBlock()
-	parser.Init(tokenTab)
+	g := compile(runtime) // Compilation du runtime
 
-	var g []string
-
-	for parser.Courant().DataType != token.EOF {
-		N := parser.Fonction()
-		parser.PrintNoeud(N, 0)
-		N = semantique.Sem(N)
-		g = append(g, gencode.Gen(N)...)
-	}
-	// g = append(g, ".start", "resn "+fmt.Sprint(semantique.NbSlot))
+	g = append(g, compile(data)...) // Compilation du code source
 
 	g = append(g, ".start", "prep main", "call 0", "halt")
 
@@ -81,4 +73,24 @@ func main() {
 		}
 	}
 
+}
+
+func compile(data []byte) []string {
+	tokenTab := lexer.Lexer(data)
+	for _, a := range tokenTab {
+		fmt.Println(strconv.Itoa(a.NbLigne) + " \t[" + string(a.ValeurString) + "]\t" + string(a.DataType))
+	}
+
+	semantique.DebutBlock()
+	parser.Init(tokenTab)
+
+	var g []string
+
+	for parser.Courant().DataType != token.EOF {
+		N := parser.Fonction()
+		parser.PrintNoeud(N, 0)
+		N = semantique.Sem(N)
+		g = append(g, gencode.Gen(N)...)
+	}
+	return g
 }

@@ -15,7 +15,7 @@ type customQueue struct {
 
 var pile customQueue
 var lblIncrementName = 1
-var ListOfAssembleurInstructions []string
+var listOfAssembleurInstructions []string
 
 func (c *customQueue) Push(name [2]string) {
 	c.lock.Lock()
@@ -57,50 +57,50 @@ func Gencode(Node parser.Noeud) {
 	switch Node.TypeDeNoeud {
 
 	case parser.NoeudConst:
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "push "+fmt.Sprint(Node.ValeurEntiere))
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "push "+fmt.Sprint(Node.ValeurEntiere))
 
 	case parser.NoeudAdd:
 		for _, n := range Node.Fils {
 			Gencode(n)
 		}
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "add")
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "add")
 
 	case parser.NoeudSub:
 		for _, n := range Node.Fils {
 			Gencode(n)
 		}
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "sub")
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "sub")
 
 	case parser.NoeudSubUnaire:
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "push 0")
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "push 0")
 		Gencode(Node.Fils[0])
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "sub")
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "sub")
 
 	case parser.NoeudMult:
 		for _, n := range Node.Fils {
 			Gencode(n)
 		}
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "mul")
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "mul")
 
 	case parser.NoeudDiv:
 		for _, n := range Node.Fils {
 			Gencode(n)
 		}
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "div")
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "div")
 
 	case parser.NoeudMod:
 		for _, n := range Node.Fils {
 			Gencode(n)
 		}
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "mod")
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "mod")
 
 	case parser.NoeudDebug:
 		Gencode(Node.Fils[0])
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "send")
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "send")
 
 	case parser.NoeudReturn:
 		Gencode(Node.Fils[0])
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "ret")
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "ret")
 
 	case parser.NoeudBlock:
 		for _, n := range Node.Fils {
@@ -109,7 +109,7 @@ func Gencode(Node parser.Noeud) {
 
 	case parser.NoeudDrop:
 		Gencode(Node.Fils[0])
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "drop")
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "drop")
 
 	case parser.NoeudTest:
 		label1 := "if" + fmt.Sprint(lblIncrementName)
@@ -117,23 +117,23 @@ func Gencode(Node parser.Noeud) {
 		label2 := "if" + fmt.Sprint(lblIncrementName)
 		lblIncrementName++
 		Gencode(Node.Fils[0])
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jumpf "+label1)
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "jumpf "+label1)
 		Gencode(Node.Fils[1])
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+label2, "."+label1)
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "jump "+label2, "."+label1)
 		if len(Node.Fils) == 3 {
 			Gencode(Node.Fils[2])
 		}
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+label2)
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "."+label2)
 
 	case parser.NoeudAffect:
 		Gencode(Node.Fils[1])
 
 		slot := Node.Fils[0].Slot
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "dup", "set "+fmt.Sprint(slot))
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "dup", "set "+fmt.Sprint(slot))
 
 	case parser.NoeudRef:
 		slot := Node.Slot
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "get "+fmt.Sprint(slot))
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "get "+fmt.Sprint(slot))
 
 	case parser.NoeudLoop:
 		l1 := "loop" + fmt.Sprint(lblIncrementName)
@@ -141,9 +141,9 @@ func Gencode(Node parser.Noeud) {
 		l2 := "loop" + fmt.Sprint(lblIncrementName)
 		lblIncrementName++
 		pile.Push([2]string{l1, l2})
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+l1)
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "."+l1)
 		Gencode(Node.Fils[0])
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+l1, "."+l2)
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "jump "+l1, "."+l2)
 		pile.Pop()
 
 	case parser.NoeudBreak:
@@ -151,26 +151,26 @@ func Gencode(Node parser.Noeud) {
 		if err != nil {
 			log.Fatal(" Erreur : NoeudBreak")
 		}
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+l[1])
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "jump "+l[1])
 
 	case parser.NoeudContinue:
 		l, err := pile.Front()
 		if err != nil {
 			log.Fatal(" Erreur : NoeudContinue")
 		}
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "jump "+l[0])
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "jump "+l[0])
 
 	case parser.NoeudFonction:
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+Node.ValeurString, "resn "+fmt.Sprint(Node.Slot-(len(Node.Fils)-1)))
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "."+Node.ValeurString, "resn "+fmt.Sprint(Node.Slot-(len(Node.Fils)-1)))
 		Gencode(Node.Fils[len(Node.Fils)-1])
-		// ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "push 0", "ret")
+		// listOfAssembleurInstructions = append(listOfAssembleurInstructions, "push 0", "ret")
 
 	case parser.NoeudAppel:
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "prep "+Node.ValeurString)
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "prep "+Node.ValeurString)
 		for _, n := range Node.Fils {
 			Gencode(n)
 		}
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "call "+fmt.Sprint(len(Node.Fils)))
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "call "+fmt.Sprint(len(Node.Fils)))
 
 	}
 
@@ -178,5 +178,5 @@ func Gencode(Node parser.Noeud) {
 
 func Gen(Node parser.Noeud) []string {
 	Gencode(Node)
-	return ListOfAssembleurInstructions
+	return listOfAssembleurInstructions
 }
