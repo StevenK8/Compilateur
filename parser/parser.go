@@ -35,7 +35,8 @@ const (
 	NoeudCloseParen typeNoeud = "NoeudClose_Paren"
 	NoeudConst      typeNoeud = "NoeudConst"
 
-	NoeudDebug typeNoeud = "NoeudDebug"
+	NoeudDebug  typeNoeud = "NoeudDebug"
+	NoeudReturn typeNoeud = "NoeudReturn"
 
 	NoeudBlock typeNoeud = "NoeudBlock"
 	NoeudDrop  typeNoeud = "NoeudDrop"
@@ -320,6 +321,13 @@ func instruction() Noeud {
 		N = nouveauNoeud(NoeudContinue, Courant().NbLigne)
 		avancer()
 		accepter(token.PointVirgule)
+		return N
+
+	} else if verifier(token.Return) {
+		E := expression(0)
+		accepter(token.PointVirgule)
+		N = nouveauNoeud(NoeudReturn, Courant().NbLigne)
+		N = ajouterEnfant(N, E)
 		return N
 
 	} else {

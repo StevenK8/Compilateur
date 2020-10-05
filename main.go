@@ -29,7 +29,7 @@ func main() {
 
 	if *boolPtr || *fileName == "" {
 		fmt.Println("Utilisation du Compilateur:\n" +
-			"./Compilateur -file='test.txt' -o 'test.out'")
+			"./Compilateur -file='test.txt' -o='test.out'")
 		os.Exit(0)
 	}
 
@@ -49,16 +49,15 @@ func main() {
 
 	var g []string
 
-	g = append(g, ".start", "resn "+fmt.Sprint(semantique.NbSlot))
-
 	for parser.Courant().DataType != token.EOF {
 		N := parser.Fonction()
 		parser.PrintNoeud(N, 0)
 		N = semantique.Sem(N)
 		g = append(g, gencode.Gen(N)...)
 	}
+	// g = append(g, ".start", "resn "+fmt.Sprint(semantique.NbSlot))
 
-	g = append(g, "halt")
+	g = append(g, ".start", "prep main", "call 0", "halt")
 
 	var outPath string
 	if *fileNameOut == "" {

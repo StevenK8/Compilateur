@@ -3,11 +3,11 @@ int main(){
     int b;
 
     a=4;
-    b=1;
+    b=2;
 
     while(a<10){
         a = a + b;
     }
 
-    debug 1;
+    return a;
 }

@@ -192,6 +192,8 @@ func getIdent(data []byte, charPos int) (token.TokenType, int) {
 			dataType = token.KeywordBreak
 		} else if charPos < len(data)-7 && string(data[charPos:charPos+8]) == "continue" && ((charPos < len(data)-8 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+8]))) || (charPos < len(data)-7)) {
 			dataType = token.KeywordContinue
+		} else if charPos < len(data)-5 && string(data[charPos:charPos+6]) == "return" && ((charPos < len(data)-6 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+6]))) || (charPos < len(data)-5)) {
+			dataType = token.Return
 		}
 
 		if !checkMatchChar(`[a-zA-Z]`, string(data[charPos+1])) {

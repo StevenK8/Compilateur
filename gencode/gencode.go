@@ -98,6 +98,10 @@ func Gencode(Node parser.Noeud) {
 		Gencode(Node.Fils[0])
 		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "send")
 
+	case parser.NoeudReturn:
+		Gencode(Node.Fils[0])
+		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "ret")
+
 	case parser.NoeudBlock:
 		for _, n := range Node.Fils {
 			Gencode(n)
@@ -159,7 +163,7 @@ func Gencode(Node parser.Noeud) {
 	case parser.NoeudFonction:
 		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "."+Node.ValeurString, "resn "+fmt.Sprint(Node.Slot-(len(Node.Fils)-1)))
 		Gencode(Node.Fils[len(Node.Fils)-1])
-		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "push 0", "ret")
+		// ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "push 0", "ret")
 
 	case parser.NoeudAppel:
 		ListOfAssembleurInstructions = append(ListOfAssembleurInstructions, "prep "+Node.ValeurString)

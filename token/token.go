@@ -44,6 +44,7 @@ const (
 	MinusUnaire        = "-u"
 	Debug              = "Debug"
 	Ignore             = "Ignored"
+	Return             = "Return"
 )
 
 type Token struct {
