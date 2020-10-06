@@ -66,7 +66,7 @@ var tabOperation = []operation{
 	operation{token.MinusUnaire, 55, 56, NoeudSubUnaire},
 	operation{token.OperatorMult, 50, 51, NoeudMult},
 	operation{token.OperatorDiv, 50, 51, NoeudDiv},
-	//	operation {token.Modulo, 50, 51, NoeudMod},
+	operation{token.OperatorMod, 50, 51, NoeudMod},
 	operation{token.OperatorPlus, 40, 41, NoeudAdd},
 	operation{token.OperatorMinus, 40, 41, NoeudSub},
 	operation{token.LessThan, 30, 31, NoeudLessThan},

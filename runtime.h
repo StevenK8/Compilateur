@@ -23,7 +23,7 @@ int printsub (int n){
 	r = n/10;
 	d = n%10;
 	
-	printsub( r );
+	printsub(r);
 	send d+48;
 }
 
