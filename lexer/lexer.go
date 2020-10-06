@@ -151,9 +151,17 @@ func getOperator(data []byte, charPos int) (token.TokenType, int) {
 
 	case "<":
 		dataType = token.LessThan
+		if string(data[charPos+1]) == "=" {
+			longueur++
+			dataType = token.LessOrEqual
+		}
 
 	case ">":
 		dataType = token.GreaterThan
+		if string(data[charPos+1]) == "=" {
+			longueur++
+			dataType = token.GreaterOrEqual
+		}
 
 	default:
 		return getIdent(data, charPos)
@@ -172,28 +180,30 @@ func getIdent(data []byte, charPos int) (token.TokenType, int) {
 	}
 
 	for longueur = 0; charPos < len(data)-1; charPos++ {
-		if charPos < len(data)-1 && string(data[charPos:charPos+2]) == "if" && ((charPos < len(data)-2 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+2]))) || (charPos < len(data)-1)) {
+		if condGetWord(data, charPos, "if") {
 			dataType = token.KeywordIf
-		} else if charPos < len(data)-4 && string(data[charPos:charPos+5]) == "while" && ((charPos < len(data)-5 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5]))) || (charPos < len(data)-4)) {
+		} else if condGetWord(data, charPos, "while") {
 			dataType = token.KeywordWhile
-		} else if charPos < len(data)-3 && string(data[charPos:charPos+4]) == "true" && ((charPos < len(data)-4 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+4]))) || (charPos < len(data)-3)) {
+		} else if condGetWord(data, charPos, "true") {
 			dataType = token.BooleanTrue
-		} else if charPos < len(data)-4 && string(data[charPos:charPos+5]) == "false" && ((charPos < len(data)-5 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5]))) || (charPos < len(data)-4)) {
+		} else if condGetWord(data, charPos, "false") {
 			dataType = token.BooleanFalse
-		} else if charPos < len(data)-3 && string(data[charPos:charPos+4]) == "else" && ((charPos < len(data)-4 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+4]))) || (charPos < len(data)-3)) {
+		} else if condGetWord(data, charPos, "else") {
 			dataType = token.KeywordElse
-		} else if charPos < len(data)-4 && string(data[charPos:charPos+5]) == "debug" && ((charPos < len(data)-5 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5]))) || (charPos < len(data)-4)) {
+		} else if condGetWord(data, charPos, "debug") {
 			dataType = token.Debug
-		} else if charPos < len(data)-2 && string(data[charPos:charPos+3]) == "int" && ((charPos < len(data)-3 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+3]))) || (charPos < len(data)-2)) {
+		} else if condGetWord(data, charPos, "int") {
 			dataType = token.KeywordInt
-		} else if charPos < len(data)-2 && string(data[charPos:charPos+3]) == "for" && ((charPos < len(data)-3 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+3]))) || (charPos < len(data)-2)) {
+		} else if condGetWord(data, charPos, "for") {
 			dataType = token.KeywordFor
-		} else if charPos < len(data)-4 && string(data[charPos:charPos+5]) == "break" && ((charPos < len(data)-5 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+5]))) || (charPos < len(data)-4)) {
+		} else if condGetWord(data, charPos, "break") {
 			dataType = token.KeywordBreak
-		} else if charPos < len(data)-7 && string(data[charPos:charPos+8]) == "continue" && ((charPos < len(data)-8 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+8]))) || (charPos < len(data)-7)) {
+		} else if condGetWord(data, charPos, "continue") {
 			dataType = token.KeywordContinue
-		} else if charPos < len(data)-5 && string(data[charPos:charPos+6]) == "return" && ((charPos < len(data)-6 && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+6]))) || (charPos < len(data)-5)) {
+		} else if condGetWord(data, charPos, "return") {
 			dataType = token.Return
+		} else if condGetWord(data, charPos, "send") {
+			dataType = token.KeywordSend
 		}
 
 		if !checkMatchChar(`[a-zA-Z]`, string(data[charPos+1])) {
@@ -222,4 +232,12 @@ func getNumber(data []byte, charPos int) (token.TokenType, int) {
 	}
 
 	return dataType, longueur
+}
+
+func condGetWord(data []byte, charPos int, mot string) bool {
+	lenMot := len(mot)
+	if charPos < len(data)-(lenMot-1) && string(data[charPos:charPos+lenMot]) == mot && ((charPos < len(data)-lenMot && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+lenMot]))) || (charPos < len(data)-(lenMot-1))) {
+		return true
+	}
+	return false
 }

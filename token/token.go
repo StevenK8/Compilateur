@@ -13,7 +13,9 @@ const (
 	NotEqual           = "!="
 	Not                = "!"
 	LessThan           = "<"
+	LessOrEqual        = "<="
 	GreaterThan        = ">"
+	GreaterOrEqual     = ">="
 	Equalequal         = "=="
 	Equal              = "Equal"       // =
 	OperatorPlus       = "Add"         // +
@@ -36,6 +38,7 @@ const (
 	KeywordBreak       = "Break"
 	KeywordContinue    = "Continue"
 	KeywordInt         = "int"
+	KeywordSend        = "Send"
 	BooleanTrue        = "True"
 	BooleanFalse       = "False"
 	And                = "And"
