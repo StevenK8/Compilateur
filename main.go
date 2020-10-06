@@ -21,7 +21,7 @@ import (
 )
 
 func main() {
-	fileName := flag.String("file", "", "path of input file")
+	fileName := flag.String("file", "test.txt", "path of input file")
 	fileNameOut := flag.String("o", "", "path of output file")
 	boolPtr := flag.Bool("h", false, "a bool")
 
@@ -45,11 +45,11 @@ func main() {
 		return
 	}
 
-	g := compile(runtime) // Compilation du runtime
+	compile(runtime) // Compilation du runtime
 
-	g = append(g, compile(data)...) // Compilation du code source
+	compile(data) // Compilation du code source
 
-	g = append(g, ".start", "prep main", "call 0", "halt")
+	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
 
 	var outPath string
 	if *fileNameOut == "" {
@@ -66,6 +66,8 @@ func main() {
 
 	defer f.Close()
 
+	g := gencode.GetGenList()
+
 	for _, gen := range g {
 		_, err = f.WriteString(gen + "\n")
 		if err != nil {
@@ -75,7 +77,7 @@ func main() {
 
 }
 
-func compile(data []byte) []string {
+func compile(data []byte) {
 	tokenTab := lexer.Lexer(data)
 	for _, a := range tokenTab {
 		fmt.Println(strconv.Itoa(a.NbLigne) + " \t[" + string(a.ValeurString) + "]\t" + string(a.DataType))
@@ -84,13 +86,10 @@ func compile(data []byte) []string {
 	semantique.DebutBlock()
 	parser.Init(tokenTab)
 
-	var g []string
-
 	for parser.Courant().DataType != token.EOF {
 		N := parser.Fonction()
 		parser.PrintNoeud(N, 0)
 		N = semantique.Sem(N)
-		g = append(g, gencode.Gen(N)...)
+		gencode.Gen(N)
 	}
-	return g
 }

@@ -96,6 +96,10 @@ func Gencode(Node parser.Noeud) {
 
 	case parser.NoeudDebug:
 		Gencode(Node.Fils[0])
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "dbg")
+
+	case parser.NoeudSend:
+		Gencode(Node.Fils[0])
 		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "send")
 
 	case parser.NoeudReturn:
@@ -126,10 +130,18 @@ func Gencode(Node parser.Noeud) {
 		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "."+label2)
 
 	case parser.NoeudAffect:
-		Gencode(Node.Fils[1])
+		if Node.Fils[0].TypeDeNoeud == parser.NoeudRef {
+			Gencode(Node.Fils[1])
+			listOfAssembleurInstructions = append(listOfAssembleurInstructions, "dup", "set "+fmt.Sprint(Node.Fils[0].Slot))
+		} else {
+			Gencode(Node.Fils[0].Fils[0])
+			Gencode(Node.Fils[1])
+			listOfAssembleurInstructions = append(listOfAssembleurInstructions, "write", "push 0")
+		}
 
-		slot := Node.Fils[0].Slot
-		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "dup", "set "+fmt.Sprint(slot))
+	case parser.NoeudIndirection:
+		Gencode(Node.Fils[0])
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "read")
 
 	case parser.NoeudRef:
 		slot := Node.Slot
@@ -172,11 +184,25 @@ func Gencode(Node parser.Noeud) {
 		}
 		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "call "+fmt.Sprint(len(Node.Fils)))
 
+	case parser.NoeudExpo:
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "prep puissance")
+		Gencode(Node.Fils[0])
+		Gencode(Node.Fils[1])
+		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "call 2")
 	}
 
 }
 
 func Gen(Node parser.Noeud) []string {
 	Gencode(Node)
+	return listOfAssembleurInstructions
+}
+
+func AddToList(elements []string) {
+	listOfAssembleurInstructions = append(listOfAssembleurInstructions, elements...)
+}
+
+// GetGenList: Getter Of Result
+func GetGenList() []string {
 	return listOfAssembleurInstructions
 }

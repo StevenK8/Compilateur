@@ -37,6 +37,7 @@ const (
 
 	NoeudDebug  typeNoeud = "NoeudDebug"
 	NoeudReturn typeNoeud = "NoeudReturn"
+	NoeudSend   typeNoeud = "NoeudSend"
 
 	NoeudBlock typeNoeud = "NoeudBlock"
 	NoeudDrop  typeNoeud = "NoeudDrop"
@@ -46,8 +47,9 @@ const (
 	NoeudBreak    typeNoeud = "NoeudBreak"
 	NoeudContinue typeNoeud = "NoeudContinue"
 
-	NoeudAppel    typeNoeud = "NoeudAppel"
-	NoeudFonction typeNoeud = "NoeudFonction"
+	NoeudAppel       typeNoeud = "NoeudAppel"
+	NoeudFonction    typeNoeud = "NoeudFonction"
+	NoeudIndirection typeNoeud = "NoeudIndirection"
 )
 
 type operation struct {
@@ -58,8 +60,9 @@ type operation struct {
 }
 
 var tabOperation = []operation{
-	//	operation {token.Exposant, 60, 61, NoeudExpo},
+	operation{token.Pow, 60, 61, NoeudExpo},
 	operation{token.Not, 55, 56, NoeudNot},
+	operation{token.Pointeur, 55, 56, NoeudIndirection},
 	operation{token.MinusUnaire, 55, 56, NoeudSubUnaire},
 	operation{token.OperatorMult, 50, 51, NoeudMult},
 	operation{token.OperatorDiv, 50, 51, NoeudDiv},
@@ -177,6 +180,11 @@ func atome() Noeud {
 	} else if verifier(token.OperatorMinus) {
 		N = nouveauNoeud(NoeudSubUnaire, Courant().NbLigne)
 		A := expression(getPrio(token.MinusUnaire).prioD)
+		N = ajouterEnfant(N, A)
+		return N
+	} else if verifier(token.OperatorMult) {
+		N = nouveauNoeud(NoeudIndirection, Courant().NbLigne)
+		A := expression(getPrio(token.Pointeur).prioD)
 		N = ajouterEnfant(N, A)
 		return N
 	} else if verifier(token.Not) {

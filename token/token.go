@@ -45,6 +45,7 @@ const (
 	Or                 = "Or"
 	EOF                = "EOF"
 	MinusUnaire        = "-u"
+	Pointeur           = "*u"
 	Debug              = "Debug"
 	Ignore             = "Ignored"
 	Return             = "Return"
