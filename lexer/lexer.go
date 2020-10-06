@@ -236,7 +236,7 @@ func getNumber(data []byte, charPos int) (token.TokenType, int) {
 
 func condGetWord(data []byte, charPos int, mot string) bool {
 	lenMot := len(mot)
-	if charPos < len(data)-(lenMot-1) && string(data[charPos:charPos+lenMot]) == mot && ((charPos < len(data)-lenMot && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+lenMot]))) || (charPos < len(data)-(lenMot-1))) {
+	if charPos < len(data)-(lenMot-1) && string(data[charPos:charPos+lenMot]) == mot && ((charPos < len(data)-lenMot && !checkMatchChar(`[a-zA-Z]`, string(data[charPos+lenMot]))) && (charPos < len(data)-(lenMot-1))) {
 		return true
 	}
 	return false

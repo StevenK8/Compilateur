@@ -30,7 +30,7 @@ int printsub (int n){
 int print(int n){
 	if (n<0){
 		send 45;
-		 = -N;
+		n = -n;
 	}
 	if (n==0){
 		send 48;
