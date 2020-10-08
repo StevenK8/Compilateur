@@ -1,10 +1,11 @@
 package semantique
 
 import (
-	parser "github.com/StevenK8/Compilateur/parser"
 	"fmt"
 	"log"
 	"sync"
+
+	parser "github.com/StevenK8/Compilateur/parser"
 )
 
 type Symbol struct {
@@ -100,8 +101,9 @@ func Sem(N parser.Noeud) parser.Noeud {
 
 	case parser.NoeudFonction:
 		NbSlot = 0
-		DebutBlock()
 		_, err := Declarer(N.ValeurString, "fonction")
+		DebutBlock()
+
 		if err != nil {
 			log.Fatal(" Erreur : Declarer")
 			break

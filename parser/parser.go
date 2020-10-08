@@ -20,10 +20,12 @@ const (
 	NoeudRef    typeNoeud = "NoeudReference"
 	NoeudAffect typeNoeud = "NoeudAffection"
 
-	NoeudLessThan    typeNoeud = "NoeudLessThan"
-	NoeudGreaterThan typeNoeud = "NoeudGreaterThan"
-	NoeudEqualequal  typeNoeud = "NoeudEqualequal"
-	NoeudNotEqual    typeNoeud = "NoeudNotEqual"
+	NoeudLessThan       typeNoeud = "NoeudLessThan"
+	NoeudGreaterThan    typeNoeud = "NoeudGreaterThan"
+	NoeudEqualequal     typeNoeud = "NoeudEqualequal"
+	NoeudNotEqual       typeNoeud = "NoeudNotEqual"
+	NoeudLessOrEqual    typeNoeud = "NoeudLessOrEqual"
+	NoeudGreaterOrEqual typeNoeud = "NoeudGreaterOrEqual"
 
 	NoeudSubUnaire typeNoeud = "NoeudSubUnaire"
 	NoeudNot       typeNoeud = "NoeudNot"
@@ -73,6 +75,8 @@ var tabOperation = []operation{
 	operation{token.GreaterThan, 30, 31, NoeudGreaterThan},
 	operation{token.Equalequal, 30, 31, NoeudEqualequal},
 	operation{token.NotEqual, 30, 31, NoeudNotEqual},
+	operation{token.LessOrEqual, 30, 31, NoeudLessOrEqual},
+	operation{token.GreaterOrEqual, 30, 31, NoeudGreaterOrEqual},
 	operation{token.And, 20, 21, NoeudAnd},
 	operation{token.Or, 10, 11, NoeudOr},
 	operation{token.Equal, 5, 5, NoeudAffect},
@@ -94,7 +98,7 @@ func getPrio(typeWanted token.TokenType) operation {
 		}
 	}
 
-	log.Fatal("[ Line ", Courant().NbLigne, " ] Erreur : operateur ", typeWanted, " non trouvé.")
+	log.Fatal("[ Line ", Courant().NbLigne, ", Pos ", posToken%Courant().NbLigne, " ] Erreur : operateur ", typeWanted, " non trouvé.")
 	return operation{"", 0, 0, ""}
 }
 
@@ -162,7 +166,7 @@ func verifier(typeCheck token.TokenType) bool {
 
 func accepter(typeCheck token.TokenType) {
 	if Courant().DataType != typeCheck {
-		log.Fatal("[ Line ", Courant().NbLigne, " ] Erreur accepter : type - ", typeCheck, " attendu, ", Courant().DataType, " reçu.")
+		log.Fatal("[ Line ", Courant().NbLigne, ", Pos ", posToken%Courant().NbLigne, " ] Erreur accepter : type - ", typeCheck, " attendu, ", Courant().DataType, " (", Courant().ValeurString, ") reçu.")
 	}
 	avancer()
 }
@@ -204,6 +208,7 @@ func atome() Noeud {
 			N = nouveauNoeud(NoeudAppel, T.NbLigne)
 			N.ValeurString = T.ValeurString
 			for Courant().DataType != token.ParentheseFermante {
+				N = ajouterEnfant(N, expression(0))
 				if !verifier(token.Virgule) {
 					break
 				}
@@ -247,6 +252,13 @@ func instruction() Noeud {
 		E := expression(0)
 		accepter(token.PointVirgule)
 		N = nouveauNoeud(NoeudDebug, Courant().NbLigne)
+		N = ajouterEnfant(N, E)
+		return N
+
+	} else if verifier(token.KeywordSend) {
+		E := expression(0)
+		accepter(token.PointVirgule)
+		N = nouveauNoeud(NoeudSend, Courant().NbLigne)
 		N = ajouterEnfant(N, E)
 		return N
 
