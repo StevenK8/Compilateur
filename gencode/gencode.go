@@ -94,6 +94,36 @@ func Gencode(Node parser.Noeud) {
 		}
 		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "mod")
 
+	case parser.NoeudEqualequal:
+		Gencode(Node.Fils[0])
+		Gencode(Node.Fils[1])
+		addElement("cmpeq")
+
+	case parser.NoeudNotEqual:
+		Gencode(Node.Fils[0])
+		Gencode(Node.Fils[1])
+		addElement("cmpne")
+
+	case parser.NoeudLessThan:
+		Gencode(Node.Fils[0])
+		Gencode(Node.Fils[1])
+		addElement("cmpit")
+
+	case parser.NoeudLessOrEqual:
+		Gencode(Node.Fils[0])
+		Gencode(Node.Fils[1])
+		addElement("cmple")
+
+	case parser.NoeudGreaterThan:
+		Gencode(Node.Fils[0])
+		Gencode(Node.Fils[1])
+		addElement("cmpgt")
+
+	case parser.NoeudGreaterOrEqual:
+		Gencode(Node.Fils[0])
+		Gencode(Node.Fils[1])
+		addElement("cmpge")
+
 	case parser.NoeudDebug:
 		Gencode(Node.Fils[0])
 		listOfAssembleurInstructions = append(listOfAssembleurInstructions, "dbg")
@@ -199,6 +229,10 @@ func Gen(Node parser.Noeud) []string {
 }
 
 func AddToList(elements []string) {
+	listOfAssembleurInstructions = append(listOfAssembleurInstructions, elements...)
+}
+
+func addElement(elements ...string) {
 	listOfAssembleurInstructions = append(listOfAssembleurInstructions, elements...)
 }
 

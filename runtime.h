@@ -27,7 +27,7 @@ int printsub (int n){
 	send d+48;
 }
 
-int print(int n){
+int printf(int n){
 	if (n<0){
 		send 45;
 		n = -n;

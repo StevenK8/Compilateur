@@ -1,11 +1,16 @@
+
 int main(){
     int a;
     int b;
 
     a=65;
     b=2;
-    
-    debug a;
+
+    if(b < 56){
+        debug b;
+    }else{
+        debug a;
+    }
 
     return a;
 }
