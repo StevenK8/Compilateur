@@ -107,7 +107,7 @@ func Gencode(Node parser.Noeud) {
 	case parser.NoeudLessThan:
 		Gencode(Node.Fils[0])
 		Gencode(Node.Fils[1])
-		addElement("cmpit")
+		addElement("cmplt")
 
 	case parser.NoeudLessOrEqual:
 		Gencode(Node.Fils[0])
