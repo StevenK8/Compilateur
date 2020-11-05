@@ -20,9 +20,19 @@ import (
 	"github.com/StevenK8/Compilateur/token"
 )
 
+func compileRuntime() {
+	runtime, err := ioutil.ReadFile("runtime.h")
+	if err != nil {
+		fmt.Println("Runtime reading error:", err)
+		return
+	}
+
+	compile(runtime) // Compilation du runtime
+}
+
 func main() {
 	fileName := flag.String("file", "test.txt", "path of input file")
-	fileNameOut := flag.String("o", "", "path of output file")
+
 	boolPtr := flag.Bool("h", false, "a bool")
 
 	flag.Parse()
@@ -39,21 +49,21 @@ func main() {
 		return
 	}
 
-	runtime, err := ioutil.ReadFile("runtime.h")
-	if err != nil {
-		fmt.Println("Runtime reading error:", err)
-		return
-	}
-
-	compile(runtime) // Compilation du runtime
+	compileRuntime()
 
 	compile(data) // Compilation du code source
 
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
 
+	writeOutput(*fileName)
+}
+
+func writeOutput(fileName string) {
+	fileNameOut := flag.String("o", "", "path of output file")
+
 	var outPath string
 	if *fileNameOut == "" {
-		outPath = strings.Split(*fileName, ".")[0] + ".out"
+		outPath = strings.Split(fileName, ".")[0] + ".out"
 	} else {
 		outPath = *fileNameOut
 	}
@@ -74,7 +84,6 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-
 }
 
 func compile(data []byte) {
