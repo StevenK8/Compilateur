@@ -1,10 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"os/exec"
-	"strconv"
 	"testing"
 
 	"github.com/StevenK8/Compilateur/gencode"
@@ -14,7 +11,7 @@ import (
 func execute(fileName string) (string, error) {
 	var err error
 	out, err := exec.Command("./msm", fileName).Output()
-	return string(out[:len(out)-1]), err
+	return string(out[:]), err
 }
 
 func TestMult(t *testing.T) {
@@ -31,22 +28,21 @@ func TestMult(t *testing.T) {
 			return 0;
 		}`)
 
-	expectedval := 15
+	expectedval := "15"
+
 	compile(data)
-
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
+	writeOutput("test")
+	result, err := execute("test.out")
 
-	writeOutput("testmult")
-	result, err := execute("testmult.out")
-
-	val, err := strconv.Atoi(result)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(2)
+	if len(result) > 1 {
+		result = result[:len(result)-1]
+	} else {
+		t.Errorf("Pas de résultat")
 	}
 
-	if val != expectedval || err != nil {
-		t.Errorf("Multiplication incorrecte, reçu %d au lieu de %d.", val, expectedval)
+	if result != expectedval || err != nil {
+		t.Errorf("Multiplication incorrecte, reçu %s au lieu de %s.", result, expectedval)
 	}
 }
 
@@ -64,22 +60,21 @@ func TestAdd(t *testing.T) {
 			return 0;
 		}`)
 
-	expectedval := 8
+	expectedval := "8"
+
 	compile(data)
-
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
+	writeOutput("test")
 
-	writeOutput("testmult")
-	result, err := execute("testmult.out")
-
-	val, err := strconv.Atoi(result)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(2)
+	result, err := execute("test.out")
+	if len(result) > 1 {
+		result = result[:len(result)-1]
+	} else {
+		t.Errorf("Pas de résultat")
 	}
 
-	if val != expectedval || err != nil {
-		t.Errorf("Addition incorrecte, reçu %d au lieu de %d.", val, expectedval)
+	if result != expectedval || err != nil {
+		t.Errorf("Addition incorrecte, reçu %s au lieu de %s.", result, expectedval)
 	}
 }
 
@@ -97,22 +92,21 @@ func TestSub(t *testing.T) {
 			return 0;
 		}`)
 
-	expectedval := -1
+	expectedval := "-1"
+
 	compile(data)
-
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
+	writeOutput("test")
 
-	writeOutput("testmult")
-	result, err := execute("testmult.out")
-
-	val, err := strconv.Atoi(result)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(2)
+	result, err := execute("test.out")
+	if len(result) > 1 {
+		result = result[:len(result)-1]
+	} else {
+		t.Errorf("Pas de résultat")
 	}
 
-	if val != expectedval || err != nil {
-		t.Errorf("Soustraction incorrecte, reçu %d au lieu de %d.", val, expectedval)
+	if result != expectedval || err != nil {
+		t.Errorf("Soustraction incorrecte, reçu %s au lieu de %s.", result, expectedval)
 	}
 }
 
@@ -130,22 +124,21 @@ func TestDiv(t *testing.T) {
 			return 0;
 		}`)
 
-	expectedval := 6
+	expectedval := "6"
+
 	compile(data)
-
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
+	writeOutput("test")
 
-	writeOutput("testmult")
-	result, err := execute("testmult.out")
-
-	val, err := strconv.Atoi(result)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(2)
+	result, err := execute("test.out")
+	if len(result) > 1 {
+		result = result[:len(result)-1]
+	} else {
+		t.Errorf("Pas de résultat")
 	}
 
-	if val != expectedval || err != nil {
-		t.Errorf("Division incorrecte, reçu %d au lieu de %d.", val, expectedval)
+	if result != expectedval || err != nil {
+		t.Errorf("Division incorrecte, reçu %s au lieu de %s.", result, expectedval)
 	}
 }
 
@@ -163,22 +156,21 @@ func TestMod(t *testing.T) {
 			return 0;
 		}`)
 
-	expectedval := 1
+	expectedval := "1"
+
 	compile(data)
-
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
+	writeOutput("test")
 
-	writeOutput("testmult")
-	result, err := execute("testmult.out")
-
-	val, err := strconv.Atoi(result)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(2)
+	result, err := execute("test.out")
+	if len(result) > 1 {
+		result = result[:len(result)-1]
+	} else {
+		t.Errorf("Pas de résultat")
 	}
 
-	if val != expectedval || err != nil {
-		t.Errorf("Modulo incorrect, reçu %d au lieu de %d.", val, expectedval)
+	if result != expectedval || err != nil {
+		t.Errorf("Modulo incorrecte, reçu %s au lieu de %s.", result, expectedval)
 	}
 }
 
@@ -209,11 +201,15 @@ func TestBoucleFunc(t *testing.T) {
 5`
 
 	compile(data)
-
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
+	writeOutput("test")
 
-	writeOutput("testmult")
-	result, err := execute("testmult.out")
+	result, err := execute("test.out")
+	if len(result) > 1 {
+		result = result[:len(result)-1]
+	} else {
+		t.Errorf("Pas de résultat")
+	}
 
 	if result != expectedval || err != nil {
 		t.Errorf("BoucleFunc incorrecte, reçu %s au lieu de %s.", result, expectedval)
