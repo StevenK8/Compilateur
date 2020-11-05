@@ -30,9 +30,9 @@ func TestMult(t *testing.T) {
 
 	expectedval := "15"
 
-	compile(data)
+	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test")
+	writeOutput("test", "")
 	result, err := execute("test.out")
 
 	if len(result) > 1 {
@@ -62,9 +62,9 @@ func TestAdd(t *testing.T) {
 
 	expectedval := "8"
 
-	compile(data)
+	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test")
+	writeOutput("test", "")
 
 	result, err := execute("test.out")
 	if len(result) > 1 {
@@ -94,9 +94,9 @@ func TestSub(t *testing.T) {
 
 	expectedval := "-1"
 
-	compile(data)
+	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test")
+	writeOutput("test", "")
 
 	result, err := execute("test.out")
 	if len(result) > 1 {
@@ -126,9 +126,9 @@ func TestDiv(t *testing.T) {
 
 	expectedval := "6"
 
-	compile(data)
+	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test")
+	writeOutput("test", "")
 
 	result, err := execute("test.out")
 	if len(result) > 1 {
@@ -158,9 +158,9 @@ func TestMod(t *testing.T) {
 
 	expectedval := "1"
 
-	compile(data)
+	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test")
+	writeOutput("test", "")
 
 	result, err := execute("test.out")
 	if len(result) > 1 {
@@ -200,9 +200,9 @@ func TestBoucleFunc(t *testing.T) {
 4
 5`
 
-	compile(data)
+	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test")
+	writeOutput("test", "")
 
 	result, err := execute("test.out")
 	if len(result) > 1 {

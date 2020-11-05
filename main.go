@@ -27,12 +27,13 @@ func compileRuntime() {
 		return
 	}
 
-	compile(runtime) // Compilation du runtime
+	compile(runtime, false) // Compilation du runtime
 }
 
 func main() {
 	fileName := flag.String("file", "test.txt", "path of input file")
-
+	fileNameOut := flag.String("o", "", "path of output file")
+	verbrose := flag.Bool("v", false, "verbrose")
 	boolPtr := flag.Bool("h", false, "a bool")
 
 	flag.Parse()
@@ -51,21 +52,19 @@ func main() {
 
 	compileRuntime()
 
-	compile(data) // Compilation du code source
+	compile(data, *verbrose) // Compilation du code source
 
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
 
-	writeOutput(*fileName)
+	writeOutput(*fileName, *fileNameOut)
 }
 
-func writeOutput(fileName string) {
-	fileNameOut := flag.String("o", "", "path of output file")
-
+func writeOutput(fileName string, fileNameOut string) {
 	var outPath string
-	if *fileNameOut == "" {
+	if fileNameOut == "" {
 		outPath = strings.Split(fileName, ".")[0] + ".out"
 	} else {
-		outPath = *fileNameOut
+		outPath = fileNameOut
 	}
 
 	f, err := os.Create(outPath)
@@ -86,10 +85,12 @@ func writeOutput(fileName string) {
 	}
 }
 
-func compile(data []byte) {
+func compile(data []byte, verbrose bool) {
 	tokenTab := lexer.Lexer(data)
-	for _, a := range tokenTab {
-		fmt.Println(strconv.Itoa(a.NbLigne) + " \t[" + string(a.ValeurString) + "]\t" + string(a.DataType))
+	if verbrose {
+		for _, a := range tokenTab {
+			fmt.Println(strconv.Itoa(a.NbLigne) + " \t[" + string(a.ValeurString) + "]\t" + string(a.DataType))
+		}
 	}
 
 	semantique.DebutBlock()
@@ -97,7 +98,9 @@ func compile(data []byte) {
 
 	for parser.Courant().DataType != token.EOF {
 		N := parser.Fonction()
-		parser.PrintNoeud(N, 0)
+		if verbrose {
+			parser.PrintNoeud(N, 0)
+		}
 		N = semantique.Sem(N)
 		gencode.Gen(N)
 	}
