@@ -43,10 +43,10 @@ go build
 * [x] Table des symboles
 * [x] Analyse sémantique
 * [x] Conditionelles
-* [-] Boucles (break)
-* [-] Fonctions (définitions)
-* [-] Fonctions (Appels)
+* [ ] Boucles (break)
+* [ ] Fonctions (définitions)
+* [ ] Fonctions (Appels)
 
-* [-] Pointeur
-* [-] Tableaux
-* [-] Runtime ) pour print
+* [ ] Pointeur
+* [ ] Tableaux
+* [ ] Runtime ) pour print
