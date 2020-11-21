@@ -33,4 +33,4 @@ go build
 * [ ] Exécute (compile (Texte)) = Out
 * [ ] Demander précieuse, tout voir le reste du cours.
 * [ ] Sortie brut = Code MSM
-* [ ] Devise en sortie (Test_mult_1.out, Test_mult_2.out, ….)
+* [X] Diviser en sortie (Test_mult_1.out, Test_mult_2.out, ….)
