@@ -2,20 +2,24 @@
 
 Steven Kerautret & Silvain Théréné
 
+[![Build Status](https://travis-ci.org/StevenK8/Compilateur.png?branch=master)](https://travis-ci.org/StevenK8/Compilateur)
+[![HitCount](http://hits.dwyl.com/StevenK8/Compilateur.svg)](http://hits.dwyl.com/StevenK8/Compilateur)
 
 ## Compilation :
 
+```sh
 go build
-
-[![Build Status](https://travis-ci.org/StevenK8/Compilateur.png?branch=master)](https://travis-ci.org/StevenK8/Compilateur)
+```
 
 ## Flags:
 
+```sh
 -file   :   Path du fichier en entrée (-file='test.txt')
 
 -o      :   Path du fichier de sortie (-o='test.out')
 
 -h      :   Affiche l'aide
+```
 
 
 ## Exécution:
@@ -29,9 +33,12 @@ go build
 ```
 
 ## TO DO (For 28 / 11 )
+
+[![N|Solid](https://cdn.discordapp.com/attachments/711219342985134090/779660615543029790/unknown.png)]()
+
 ### Tester 
 * [ ] Exécute (compile (Texte)) = Out
-* [ ] Demander précieuse, tout voir le reste du cours.https://cdn.discordapp.com/attachments/711219342985134090/779660615543029790/unknown.png
+* [ ] Demander précieuse, tout voir le reste du cours.
 * [ ] Sortie brut = Code MSM
 * [X] Diviser en sortie (Test_mult_1.out, Test_mult_2.out, ….)
 
