@@ -31,6 +31,11 @@ func TestMult(t *testing.T) {
 	expectedval := "15"
 
 	compile(data, false)
+
+	for _, gen := range gencode.GetGenList() {
+		println(gen)
+	}
+
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
 	writeOutput("test", "")
 	result, err := execute("test.out")

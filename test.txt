@@ -10,7 +10,7 @@ int main(){
         a=a+1;
         if(a == 70){
             break;
-        } // [ Line 13, Pos 8 ] Erreur accepter : type - Semicolon attendu, Close_Brace (}) reçu.
+        }
     }
 
     if(b < 56){

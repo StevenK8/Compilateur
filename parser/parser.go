@@ -334,13 +334,13 @@ func instruction() Noeud {
 
 	} else if verifier(token.KeywordBreak) {
 		N = nouveauNoeud(NoeudBreak, Courant().NbLigne)
-		avancer()
+		//avancer()
 		accepter(token.PointVirgule)
 		return N
 
 	} else if verifier(token.KeywordContinue) {
 		N = nouveauNoeud(NoeudContinue, Courant().NbLigne)
-		avancer()
+		//avancer()
 		accepter(token.PointVirgule)
 		return N
 
