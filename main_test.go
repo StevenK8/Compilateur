@@ -37,8 +37,8 @@ func TestMult(t *testing.T) {
 	}
 
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test", "")
-	result, err := execute("test.out")
+	writeOutput("test/mult", "")
+	result, err := execute("mult.out")
 
 	if len(result) > 1 {
 		result = result[:len(result)-1]
@@ -69,9 +69,9 @@ func TestAdd(t *testing.T) {
 
 	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test", "")
+	writeOutput("test/add", "")
 
-	result, err := execute("test.out")
+	result, err := execute("test/add.out")
 	if len(result) > 1 {
 		result = result[:len(result)-1]
 	} else {
@@ -101,9 +101,9 @@ func TestSub(t *testing.T) {
 
 	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test", "")
+	writeOutput("test/sub", "")
 
-	result, err := execute("test.out")
+	result, err := execute("test/sub.out")
 	if len(result) > 1 {
 		result = result[:len(result)-1]
 	} else {
@@ -133,9 +133,9 @@ func TestDiv(t *testing.T) {
 
 	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test", "")
+	writeOutput("test/div", "")
 
-	result, err := execute("test.out")
+	result, err := execute("test/div.out")
 	if len(result) > 1 {
 		result = result[:len(result)-1]
 	} else {
@@ -165,9 +165,9 @@ func TestMod(t *testing.T) {
 
 	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test", "")
+	writeOutput("test/mod", "")
 
-	result, err := execute("test.out")
+	result, err := execute("test/mod.out")
 	if len(result) > 1 {
 		result = result[:len(result)-1]
 	} else {
@@ -207,9 +207,9 @@ func TestBoucleFunc(t *testing.T) {
 
 	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test", "")
+	writeOutput("test/bouclefunc", "")
 
-	result, err := execute("test.out")
+	result, err := execute("test/bouclefunc.out")
 	if len(result) > 1 {
 		result = result[:len(result)-1]
 	} else {
