@@ -2,7 +2,7 @@
 
 Steven Kerautret & Silvain Théréné
 
-* [![Build Status](https://travis-ci.org/StevenK8/Compilateur.png?branch=master)](https://travis-ci.org/StevenK8/Compilateur)
+[![Build Status](https://travis-ci.org/StevenK8/Compilateur.png?branch=master)](https://travis-ci.org/StevenK8/Compilateur)
 
 [![HitCount](http://hits.dwyl.com/StevenK8/Compilateur.svg)](http://hits.dwyl.com/StevenK8/Compilateur)
 
