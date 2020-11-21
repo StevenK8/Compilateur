@@ -2,8 +2,6 @@
 
 Steven Kerautret & Silvain Théréné
 
-[![N|Solid](https://avatars0.githubusercontent.com/u/56358251?s=60&v=4)]
-
 
 ## Compilation :
 
@@ -20,12 +18,15 @@ go build
 -h      :   Affiche l'aide
 
 
-
 ## Exécution:
 
+```sh
 ./Compilateur.exe -file='test.txt' -o='test.out'    (Windows)
+```
 
+```sh
 ./Compilateur -file='test.txt' -o='test.out'    (Linux)
+```
 
 ## TO DO (For 28 / 11 )
 ### Tester 
