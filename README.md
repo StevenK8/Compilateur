@@ -27,7 +27,7 @@ go build
 
 ## TO DO (For 28 / 11 )
 ### Tester 
-* Exécute (compile (Texte)) = Out
+* [ ] Exécute (compile (Texte)) = Out
 * Test ne passe pas.
 * Demander précieuse, tout voir le reste du cours.
 * Sortie brut = Code MSM
