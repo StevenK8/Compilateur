@@ -28,7 +28,7 @@ go build
 ## TO DO (For 28 / 11 )
 ### Tester 
 * [ ] Exécute (compile (Texte)) = Out
-* Test ne passe pas.
-* Demander précieuse, tout voir le reste du cours.
-* Sortie brut = Code MSM
-* Devise en sortie (Test_mult_1.out, Test_mult_2.out, ….)
+** [ ] Test ne passe pas.
+* [ ] Demander précieuse, tout voir le reste du cours.
+* [ ] Sortie brut = Code MSM
+* [ ] Devise en sortie (Test_mult_1.out, Test_mult_2.out, ….)
