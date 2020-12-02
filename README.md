@@ -2,6 +2,8 @@
 
 Steven Kerautret & Silvain Théréné
 
+<a href="https://github.com/StevenK8/Compilateur/actions"><img alt="Build Status" src="https://github.com/StevenK8/Compilateur/workflows/CI/badge.svg" /></a>
+
 [![Build Status](https://travis-ci.org/StevenK8/Compilateur.png?branch=master)](https://travis-ci.org/StevenK8/Compilateur)
 
 [![HitCount](http://hits.dwyl.com/StevenK8/Compilateur.svg)](http://hits.dwyl.com/StevenK8/Compilateur)
