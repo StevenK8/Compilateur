@@ -14,12 +14,12 @@ func execute(fileName string) (string, error) {
 	if runtime.GOOS == "windows" {
 		var err error
 		out, err := exec.Command("powershell", "./MSM.exe", fileName).Output()
-		return string(out[:len(out)-2]), err
+		return string(out[:]), err
 	}else{
 		print("Linux execute :")
 		var err error
 		out, err := exec.Command("./msm ", fileName).Output()
-		return string(out[:len(out)-2]), err
+		return string(out[:]), err
 	}
 }
 
@@ -44,6 +44,8 @@ func assertEquals(t *testing.T, s1 string, s2 string) {
 
 }
 
+const EOF_CONSTANT string = "\r\n"
+
 func TestMult(t *testing.T) {
 
 	data := []byte(`
@@ -57,7 +59,7 @@ func TestMult(t *testing.T) {
 			return 0;
 		}`)
 
-	expectedval := "15"
+	expectedval := "15" + EOF_CONSTANT
 
 	assertEquals(t, createFileAndExecute(data, "mult"), expectedval)
 }
@@ -75,7 +77,7 @@ func TestAdd(t *testing.T) {
 			return 0;
 		}`)
 
-	expectedval := "8"
+	expectedval := "8" + EOF_CONSTANT
 
 	assertEquals(t, createFileAndExecute(data, "add"), expectedval)
 }
@@ -93,7 +95,7 @@ func TestSub(t *testing.T) {
 			return 0;
 		}`)
 
-	expectedval := "-1"
+	expectedval := "-1"  + EOF_CONSTANT
 
 	assertEquals(t, createFileAndExecute(data, "sub"), expectedval)
 }
@@ -111,7 +113,7 @@ func TestDiv(t *testing.T) {
 			return 0;
 		}`)
 
-	expectedval := "6"
+	expectedval := "6" + EOF_CONSTANT
 
 	assertEquals(t, createFileAndExecute(data, "div"), expectedval)
 }
@@ -129,7 +131,7 @@ func TestMod(t *testing.T) {
 			return 0;
 		}`)
 
-	expectedval := "1"
+	expectedval := "1" + EOF_CONSTANT
 
 	assertEquals(t, createFileAndExecute(data, "mod"), expectedval)
 }
@@ -153,7 +155,7 @@ func TestBoucleFunc(t *testing.T) {
 		}
 		`)
 
-	expectedval := "1\r\n2\r\n3\r\n4\r\n5"
+	expectedval := "1\r\n2\r\n3\r\n4\r\n5" + EOF_CONSTANT
 
 	assertEquals(t, createFileAndExecute(data, "bouclefunc"), expectedval)
 }
