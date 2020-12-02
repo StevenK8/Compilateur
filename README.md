@@ -1,12 +1,36 @@
 ﻿# Compilateur
 
-Steven Kerautret & Silvain Théréné
-
-<a href="https://github.com/StevenK8/Compilateur/actions"><img alt="Build Status" src="https://github.com/StevenK8/Compilateur/workflows/CI/badge.svg" /></a>
-
-[![Build Status](https://travis-ci.org/StevenK8/Compilateur.png?branch=master)](https://travis-ci.org/StevenK8/Compilateur)
-
-[![HitCount](http://hits.dwyl.com/StevenK8/Compilateur.svg)](http://hits.dwyl.com/StevenK8/Compilateur)
+<div>
+  <p>
+    <img src="https://img.shields.io/badge/Author-Steven Kerautret-yellow.svg" />
+    <img src="https://img.shields.io/badge/-Silvain Théréné-yellow.svg" />
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/Status-on development-success.svg" />
+  </p>
+  <p>
+    <a href="https://github.com/StevenK8/Compilateur/actions">
+      <img src="https://img.shields.io/badge/Build-Failed-critical.svg" />
+    </a>
+    <img src="https://img.shields.io/badge/Code coverage-0 %25-critical.svg" />
+  </p>
+  
+  <p>
+    <img src="https://img.shields.io/badge/Total tests-6-important.svg" />
+    <img src="https://img.shields.io/badge/Tests passed-0-critical.svg" />
+    <img src="https://img.shields.io/badge/Test quality-0 %25-critical.svg" />
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/langage-golang-7fd5ea.svg" />
+    <img src="https://img.shields.io/badge/Go-1.15.5-informational.svg" />
+    <img src="https://img.shields.io/badge/platform-linux-lightgray.svg" />
+    <img src="https://img.shields.io/badge/-windows-lightgray.svg" />
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/IDE Used-Visual Studio Code-informational.svg" />
+    <img src="https://img.shields.io/badge/-Goland Jetbrains-informational.svg" />
+  </p>
+</div>
 
 ## Compilation :
 
