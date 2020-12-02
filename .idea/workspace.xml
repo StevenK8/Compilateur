@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="208f8c3a-f1aa-4fd3-9eb8-476a414a34a9" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,19 +50,68 @@
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$" />
   </component>
-  <component name="RunManager">
-    <configuration name="go build github.com/StevenK8/Compilateur" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go Test.go test github.com/StevenK8/Compilateur">
+    <configuration name="TestAdd in github.com/StevenK8/Compilateur" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="Compilateur" />
       <working_directory value="$PROJECT_DIR$" />
+      <framework value="gotest" />
       <kind value="PACKAGE" />
-      <filePath value="$PROJECT_DIR$/main.go" />
       <package value="github.com/StevenK8/Compilateur" />
       <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestAdd\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestBoucleFunc in github.com/StevenK8/Compilateur" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="Compilateur" />
+      <working_directory value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/StevenK8/Compilateur" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestBoucleFunc\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestDiv in github.com/StevenK8/Compilateur" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="Compilateur" />
+      <working_directory value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/StevenK8/Compilateur" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestDiv\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestMod in github.com/StevenK8/Compilateur" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="Compilateur" />
+      <working_directory value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/StevenK8/Compilateur" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestMod\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go test github.com/StevenK8/Compilateur" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="Compilateur" />
+      <working_directory value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/StevenK8/Compilateur" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build github.com/StevenK8/Compilateur" />
+        <item itemvalue="Go Test.go test github.com/StevenK8/Compilateur" />
+        <item itemvalue="Go Test.TestAdd in github.com/StevenK8/Compilateur" />
+        <item itemvalue="Go Test.TestBoucleFunc in github.com/StevenK8/Compilateur" />
+        <item itemvalue="Go Test.TestMod in github.com/StevenK8/Compilateur" />
+        <item itemvalue="Go Test.TestDiv in github.com/StevenK8/Compilateur" />
       </list>
     </recent_temporary>
   </component>
@@ -47,25 +119,69 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
   </component>
   <component name="WindowStateProjectService">
-    <state width="2953" height="509" key="GridCell.Tab.0.bottom" timestamp="1606157089596">
-      <screen x="0" y="0" width="2996" height="1728" />
+    <state width="2951" height="509" key="GridCell.Tab.0.bottom" timestamp="1606910036541">
+      <screen x="0" y="0" width="2994" height="1728" />
     </state>
+    <state width="2951" height="509" key="GridCell.Tab.0.bottom/-3840.0.2994.1728/0.0.2994.1728/3840.0.3072.1728@0.0.2994.1728" timestamp="1606910036541" />
     <state width="2953" height="509" key="GridCell.Tab.0.bottom/-3840.0.2996.1728/0.0.2996.1728/3840.0.3072.1728@0.0.2996.1728" timestamp="1606157089596" />
-    <state width="2953" height="509" key="GridCell.Tab.0.center" timestamp="1606157089596">
-      <screen x="0" y="0" width="2996" height="1728" />
+    <state width="2951" height="509" key="GridCell.Tab.0.center" timestamp="1606910036540">
+      <screen x="0" y="0" width="2994" height="1728" />
     </state>
+    <state width="2951" height="509" key="GridCell.Tab.0.center/-3840.0.2994.1728/0.0.2994.1728/3840.0.3072.1728@0.0.2994.1728" timestamp="1606910036540" />
     <state width="2953" height="509" key="GridCell.Tab.0.center/-3840.0.2996.1728/0.0.2996.1728/3840.0.3072.1728@0.0.2996.1728" timestamp="1606157089596" />
-    <state width="2953" height="509" key="GridCell.Tab.0.left" timestamp="1606157089596">
-      <screen x="0" y="0" width="2996" height="1728" />
+    <state width="2951" height="509" key="GridCell.Tab.0.left" timestamp="1606910036540">
+      <screen x="0" y="0" width="2994" height="1728" />
     </state>
+    <state width="2951" height="509" key="GridCell.Tab.0.left/-3840.0.2994.1728/0.0.2994.1728/3840.0.3072.1728@0.0.2994.1728" timestamp="1606910036540" />
     <state width="2953" height="509" key="GridCell.Tab.0.left/-3840.0.2996.1728/0.0.2996.1728/3840.0.3072.1728@0.0.2996.1728" timestamp="1606157089596" />
-    <state width="2953" height="509" key="GridCell.Tab.0.right" timestamp="1606157089596">
-      <screen x="0" y="0" width="2996" height="1728" />
+    <state width="2951" height="509" key="GridCell.Tab.0.right" timestamp="1606910036540">
+      <screen x="0" y="0" width="2994" height="1728" />
     </state>
+    <state width="2951" height="509" key="GridCell.Tab.0.right/-3840.0.2994.1728/0.0.2994.1728/3840.0.3072.1728@0.0.2994.1728" timestamp="1606910036540" />
     <state width="2953" height="509" key="GridCell.Tab.0.right/-3840.0.2996.1728/0.0.2996.1728/3840.0.3072.1728@0.0.2996.1728" timestamp="1606157089596" />
+    <state width="2951" height="623" key="GridCell.Tab.1.bottom" timestamp="1606907259827">
+      <screen x="0" y="0" width="2994" height="1728" />
+    </state>
+    <state width="2951" height="623" key="GridCell.Tab.1.bottom/-3840.0.2994.1728/0.0.2994.1728/3840.0.3072.1728@0.0.2994.1728" timestamp="1606907259827" />
+    <state width="2951" height="623" key="GridCell.Tab.1.center" timestamp="1606907259826">
+      <screen x="0" y="0" width="2994" height="1728" />
+    </state>
+    <state width="2951" height="623" key="GridCell.Tab.1.center/-3840.0.2994.1728/0.0.2994.1728/3840.0.3072.1728@0.0.2994.1728" timestamp="1606907259826" />
+    <state width="2951" height="623" key="GridCell.Tab.1.left" timestamp="1606907259826">
+      <screen x="0" y="0" width="2994" height="1728" />
+    </state>
+    <state width="2951" height="623" key="GridCell.Tab.1.left/-3840.0.2994.1728/0.0.2994.1728/3840.0.3072.1728@0.0.2994.1728" timestamp="1606907259826" />
+    <state width="2951" height="623" key="GridCell.Tab.1.right" timestamp="1606907259827">
+      <screen x="0" y="0" width="2994" height="1728" />
+    </state>
+    <state width="2951" height="623" key="GridCell.Tab.1.right/-3840.0.2994.1728/0.0.2994.1728/3840.0.3072.1728@0.0.2994.1728" timestamp="1606907259827" />
   </component>
 </project>

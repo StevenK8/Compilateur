@@ -1,21 +1,50 @@
 package main
 
 import (
-	"os/exec"
-	"testing"
-
 	"github.com/StevenK8/Compilateur/gencode"
+	"log"
+	"os/exec"
+	"runtime"
+	"testing"
 )
 
 //L'exécution doit se faire sur linux ou WSL (./msm non reconnu sur windows)
 func execute(fileName string) (string, error) {
-	var err error
-	out, err := exec.Command("./msm", fileName).Output()
-	return string(out[:]), err
+	/// Check if machine is linux or windows
+	if runtime.GOOS == "windows" {
+		var err error
+		out, err := exec.Command("powershell", "./MSM.exe", fileName).Output()
+		return string(out[:len(out)-2]), err
+	}else{
+		print("Linux execute :")
+		var err error
+		out, err := exec.Command("./msm ", fileName).Output()
+		return string(out[:len(out)-1]), err
+	}
+}
+
+func createFileAndExecute(data []byte, file string) string{
+	compileRuntime()
+	compile(data, false)
+	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
+	writeOutput("test/"+file, "")
+	gencode.Clear()
+	res, err := execute("test/"+file+".out")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return res
+}
+
+
+func assertEquals(t *testing.T, s1 string, s2 string) {
+	if s1 != s2 {
+		t.Errorf("Fail to '%q', '%q' dosen't equal to '%q'", t.Name(), s1, s2)
+	}
+
 }
 
 func TestMult(t *testing.T) {
-	compileRuntime()
 
 	data := []byte(`
 		int main(){
@@ -30,29 +59,10 @@ func TestMult(t *testing.T) {
 
 	expectedval := "15"
 
-	compile(data, false)
-
-	for _, gen := range gencode.GetGenList() {
-		println(gen)
-	}
-
-	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test/mult", "")
-	result, err := execute("mult.out")
-
-	if len(result) > 1 {
-		result = result[:len(result)-1]
-	} else {
-		t.Errorf("Pas de résultat")
-	}
-
-	if result != expectedval || err != nil {
-		t.Errorf("Multiplication incorrecte, reçu %s au lieu de %s.", result, expectedval)
-	}
+	assertEquals(t, createFileAndExecute(data, "mult"), expectedval)
 }
 
 func TestAdd(t *testing.T) {
-	compileRuntime()
 
 	data := []byte(`
 		int main(){
@@ -67,24 +77,10 @@ func TestAdd(t *testing.T) {
 
 	expectedval := "8"
 
-	compile(data, false)
-	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test/add", "")
-
-	result, err := execute("test/add.out")
-	if len(result) > 1 {
-		result = result[:len(result)-1]
-	} else {
-		t.Errorf("Pas de résultat")
-	}
-
-	if result != expectedval || err != nil {
-		t.Errorf("Addition incorrecte, reçu %s au lieu de %s.", result, expectedval)
-	}
+	assertEquals(t, createFileAndExecute(data, "add"), expectedval)
 }
 
 func TestSub(t *testing.T) {
-	compileRuntime()
 
 	data := []byte(`
 		int main(){
@@ -99,24 +95,10 @@ func TestSub(t *testing.T) {
 
 	expectedval := "-1"
 
-	compile(data, false)
-	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test/sub", "")
-
-	result, err := execute("test/sub.out")
-	if len(result) > 1 {
-		result = result[:len(result)-1]
-	} else {
-		t.Errorf("Pas de résultat")
-	}
-
-	if result != expectedval || err != nil {
-		t.Errorf("Soustraction incorrecte, reçu %s au lieu de %s.", result, expectedval)
-	}
+	assertEquals(t, createFileAndExecute(data, "sub"), expectedval)
 }
 
 func TestDiv(t *testing.T) {
-	compileRuntime()
 
 	data := []byte(`
 		int main(){
@@ -131,24 +113,10 @@ func TestDiv(t *testing.T) {
 
 	expectedval := "6"
 
-	compile(data, false)
-	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test/div", "")
-
-	result, err := execute("test/div.out")
-	if len(result) > 1 {
-		result = result[:len(result)-1]
-	} else {
-		t.Errorf("Pas de résultat")
-	}
-
-	if result != expectedval || err != nil {
-		t.Errorf("Division incorrecte, reçu %s au lieu de %s.", result, expectedval)
-	}
+	assertEquals(t, createFileAndExecute(data, "div"), expectedval)
 }
 
 func TestMod(t *testing.T) {
-	compileRuntime()
 
 	data := []byte(`
 		int main(){
@@ -163,24 +131,10 @@ func TestMod(t *testing.T) {
 
 	expectedval := "1"
 
-	compile(data, false)
-	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test/mod", "")
-
-	result, err := execute("test/mod.out")
-	if len(result) > 1 {
-		result = result[:len(result)-1]
-	} else {
-		t.Errorf("Pas de résultat")
-	}
-
-	if result != expectedval || err != nil {
-		t.Errorf("Modulo incorrecte, reçu %s au lieu de %s.", result, expectedval)
-	}
+	assertEquals(t, createFileAndExecute(data, "mod"), expectedval)
 }
 
 func TestBoucleFunc(t *testing.T) {
-	compileRuntime()
 
 	data := []byte(`
 		int boucleFunction(int a){
@@ -199,24 +153,7 @@ func TestBoucleFunc(t *testing.T) {
 		}
 		`)
 
-	expectedval := `1
-2
-3
-4
-5`
+	expectedval := "1\r\n2\r\n3\r\n4\r\n5"
 
-	compile(data, false)
-	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
-	writeOutput("test/bouclefunc", "")
-
-	result, err := execute("test/bouclefunc.out")
-	if len(result) > 1 {
-		result = result[:len(result)-1]
-	} else {
-		t.Errorf("Pas de résultat")
-	}
-
-	if result != expectedval || err != nil {
-		t.Errorf("BoucleFunc incorrecte, reçu %s au lieu de %s.", result, expectedval)
-	}
+	assertEquals(t, createFileAndExecute(data, "bouclefunc"), expectedval)
 }

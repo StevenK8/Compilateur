@@ -240,3 +240,8 @@ func addElement(elements ...string) {
 func GetGenList() []string {
 	return listOfAssembleurInstructions
 }
+
+// Clear: clean the genlist
+func Clear(){
+	listOfAssembleurInstructions = listOfAssembleurInstructions[:0]
+}
