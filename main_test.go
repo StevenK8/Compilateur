@@ -18,7 +18,7 @@ func execute(fileName string) (string, error) {
 	}else{
 		print("Linux execute :")
 		var err error
-		out, err := exec.Command("./msm ", fileName).Output()
+		out, err := exec.Command("./msm", fileName).Output()
 		return string(out[:]), err
 	}
 }
