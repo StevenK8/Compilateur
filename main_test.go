@@ -39,7 +39,7 @@ func createFileAndExecute(data []byte, file string) string {
 
 func assertEquals(t *testing.T, s1 string, s2 string) {
 	if s1 != s2 {
-		t.Errorf("Fail to '%q', '%q' dosen't equal to '%q'", t.Name(), s1, s2)
+		t.Errorf("Failed '%q', '%q' isn't equal to '%q'", t.Name(), s1, s2)
 	}
 
 }
@@ -184,14 +184,34 @@ func TestPtr(t *testing.T) {
 	assertEquals(t, createFileAndExecute(data, "ptr"), expectedval)
 }
 
-/*
-	int increment(int *a){
-		*a = *a+1;
-		return 0;
-	}
-			int *a;
-			int var;
-			var=10;
-			a = &var;
-		increment(a);
-*/
+func TestTableau(t *testing.T) {
+
+	data := []byte(`
+		int main(){
+			int t;
+			int lenTab;
+			
+			lenTab = 5;
+			t = malloc(5);
+
+			int i;
+			i=0;
+			while(i<lenTab){
+				*(t+i) = i;
+				i=i+1;
+			}
+
+			i=0;
+			while(i<lenTab){
+				debug *(t+i);
+				i=i+1;
+			}
+
+			return 0;
+		}
+		`)
+
+	expectedval := "0\r\n1\r\n2\r\n3\r\n4" + EOF_CONSTANT
+
+	assertEquals(t, createFileAndExecute(data, "tab"), expectedval)
+}
