@@ -55,11 +55,11 @@ func TestMult(t *testing.T) {
 			int b;
 			b = 3;
 
-			debug a*b;
+			print(a*b);
 			return 0;
 		}`)
 
-	expectedval := "15" + EOF_CONSTANT
+	expectedval := "15"
 
 	assertEquals(t, createFileAndExecute(data, "mult"), expectedval)
 }
@@ -73,11 +73,11 @@ func TestAdd(t *testing.T) {
 			int b;
 			b = 3;
 
-			debug a+b;
+			print(a+b);
 			return 0;
 		}`)
 
-	expectedval := "8" + EOF_CONSTANT
+	expectedval := "8"
 
 	assertEquals(t, createFileAndExecute(data, "add"), expectedval)
 }
@@ -91,11 +91,11 @@ func TestSub(t *testing.T) {
 			int b;
 			b = 6;
 
-			debug a-b;
+			print(a-b);
 			return 0;
 		}`)
 
-	expectedval := "-1" + EOF_CONSTANT
+	expectedval := "-1"
 
 	assertEquals(t, createFileAndExecute(data, "sub"), expectedval)
 }
@@ -109,11 +109,11 @@ func TestDiv(t *testing.T) {
 			int b;
 			b = 5;
 
-			debug a/b;
+			print(a/b);
 			return 0;
 		}`)
 
-	expectedval := "6" + EOF_CONSTANT
+	expectedval := "6"
 
 	assertEquals(t, createFileAndExecute(data, "div"), expectedval)
 }
@@ -127,11 +127,11 @@ func TestMod(t *testing.T) {
 			int b;
 			b = 3;
 
-			debug a%b;
+			print(a%b);
 			return 0;
 		}`)
 
-	expectedval := "1" + EOF_CONSTANT
+	expectedval := "1"
 
 	assertEquals(t, createFileAndExecute(data, "mod"), expectedval)
 }
@@ -142,7 +142,7 @@ func TestBoucleFunc(t *testing.T) {
 		int boucleFunction(int a){
 			while (a<5){
 				a = a+1;
-				debug a;
+				print(a);
 			}
 			return a;
 		}
@@ -155,7 +155,7 @@ func TestBoucleFunc(t *testing.T) {
 		}
 		`)
 
-	expectedval := "1\r\n2\r\n3\r\n4\r\n5" + EOF_CONSTANT
+	expectedval := "12345"
 
 	assertEquals(t, createFileAndExecute(data, "bouclefunc"), expectedval)
 }
@@ -174,12 +174,12 @@ func TestPtr(t *testing.T) {
 			*(t+0) = 5;
 			increment(t);
 
-			debug *(t);
+			print(*(t));
 			return 0;
 		}
 		`)
 
-	expectedval := "25" + EOF_CONSTANT
+	expectedval := "25"
 
 	assertEquals(t, createFileAndExecute(data, "ptr"), expectedval)
 }
@@ -200,14 +200,14 @@ func TestTableau(t *testing.T) {
 			}
 
 			for(i=0;i<lenTab;i=i+1){
-				debug *(t+i);
+				print(*(t+i));
 			}
 
 			return 0;
 		}
 		`)
 
-	expectedval := "0\r\n1\r\n2\r\n3\r\n4" + EOF_CONSTANT
+	expectedval := "01234"
 
 	assertEquals(t, createFileAndExecute(data, "tab"), expectedval)
 }
@@ -218,14 +218,14 @@ func TestFor(t *testing.T) {
 		int main(){
 			int i;
 			for(i=1;i<10;i=i+1){
-				debug i;
+				print(i);
 			}
 
 			return 0;
 		}
 		`)
 
-	expectedval := "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9" + EOF_CONSTANT
+	expectedval := "123456789"
 
 	assertEquals(t, createFileAndExecute(data, "for"), expectedval)
 }
