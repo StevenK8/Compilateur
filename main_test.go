@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/StevenK8/Compilateur/gencode"
 	"log"
 	"os/exec"
 	"runtime"
 	"testing"
+
+	"github.com/StevenK8/Compilateur/gencode"
 )
 
 //L'exécution doit se faire sur linux ou WSL (./msm non reconnu sur windows)
@@ -15,7 +16,7 @@ func execute(fileName string) (string, error) {
 		var err error
 		out, err := exec.Command("powershell", "./MSM.exe", fileName).Output()
 		return string(out[:]), err
-	}else{
+	} else {
 		print("Linux execute :")
 		var err error
 		out, err := exec.Command("./msm", fileName).Output()
@@ -23,19 +24,18 @@ func execute(fileName string) (string, error) {
 	}
 }
 
-func createFileAndExecute(data []byte, file string) string{
+func createFileAndExecute(data []byte, file string) string {
 	compileRuntime()
 	compile(data, false)
 	gencode.AddToList([]string{".start", "prep main", "call 0", "halt"})
 	writeOutput("test/"+file, "")
 	gencode.Clear()
-	res, err := execute("test/"+file+".out")
+	res, err := execute("test/" + file + ".out")
 	if err != nil {
 		log.Fatal(err)
 	}
 	return res
 }
-
 
 func assertEquals(t *testing.T, s1 string, s2 string) {
 	if s1 != s2 {
@@ -95,7 +95,7 @@ func TestSub(t *testing.T) {
 			return 0;
 		}`)
 
-	expectedval := "-1"  + EOF_CONSTANT
+	expectedval := "-1" + EOF_CONSTANT
 
 	assertEquals(t, createFileAndExecute(data, "sub"), expectedval)
 }
@@ -159,3 +159,39 @@ func TestBoucleFunc(t *testing.T) {
 
 	assertEquals(t, createFileAndExecute(data, "bouclefunc"), expectedval)
 }
+
+func TestPtr(t *testing.T) {
+
+	data := []byte(`
+		int increment(int a){
+			*(a) = *(a)+20;
+			return 0;
+		}
+
+		int main(){
+			int t;
+			t = malloc(1);
+			*(t+0) = 5;
+			increment(t);
+
+			debug *(t);
+			return 0;
+		}
+		`)
+
+	expectedval := "25" + EOF_CONSTANT
+
+	assertEquals(t, createFileAndExecute(data, "ptr"), expectedval)
+}
+
+/*
+	int increment(int *a){
+		*a = *a+1;
+		return 0;
+	}
+			int *a;
+			int var;
+			var=10;
+			a = &var;
+		increment(a);
+*/
