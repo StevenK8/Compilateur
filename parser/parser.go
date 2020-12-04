@@ -308,20 +308,25 @@ func instruction() Noeud {
 
 		D1 := nouveauNoeud(NoeudDrop, Courant().NbLigne)
 		L := nouveauNoeud(NoeudLoop, Courant().NbLigne)
-		N = ajouterEnfant(N, D1, L)
 
-		D1 = ajouterEnfant(D1, E1)
 		C := nouveauNoeud(NoeudTest, Courant().NbLigne)
-		L = ajouterEnfant(L, C)
 
 		B2 := nouveauNoeud(NoeudBlock, Courant().NbLigne)
-		BRAK := nouveauNoeud(NoeudBreak, Courant().NbLigne)
-		C = ajouterEnfant(C, E2, B2, BRAK)
+		BREAK := nouveauNoeud(NoeudBreak, Courant().NbLigne)
 
 		D2 := nouveauNoeud(NoeudDrop, Courant().NbLigne)
-		B2 = ajouterEnfant(B2, I1, D2)
 
 		D2 = ajouterEnfant(D2, E3)
+
+		B2 = ajouterEnfant(B2, I1, D2)
+
+		C = ajouterEnfant(C, E2, B2, BREAK)
+
+		L = ajouterEnfant(L, C)
+
+		D1 = ajouterEnfant(D1, E1)
+
+		N = ajouterEnfant(N, D1, L)
 
 		return N
 

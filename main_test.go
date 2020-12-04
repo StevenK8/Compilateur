@@ -15,12 +15,12 @@ func execute(fileName string) (string, error) {
 	if runtime.GOOS == "windows" {
 		var err error
 		out, err := exec.Command("powershell", "./MSM.exe", fileName).Output()
-		return string(out[:]), err
+		return string(out), err
 	} else {
 		print("Linux execute :")
 		var err error
 		out, err := exec.Command("./msm", fileName).Output()
-		return string(out[:]), err
+		return string(out), err
 	}
 }
 
@@ -195,16 +195,12 @@ func TestTableau(t *testing.T) {
 			t = malloc(5);
 
 			int i;
-			i=0;
-			while(i<lenTab){
+			for(i=0;i<lenTab;i=i+1){
 				*(t+i) = i;
-				i=i+1;
 			}
 
-			i=0;
-			while(i<lenTab){
+			for(i=0;i<lenTab;i=i+1){
 				debug *(t+i);
-				i=i+1;
 			}
 
 			return 0;
@@ -214,4 +210,22 @@ func TestTableau(t *testing.T) {
 	expectedval := "0\r\n1\r\n2\r\n3\r\n4" + EOF_CONSTANT
 
 	assertEquals(t, createFileAndExecute(data, "tab"), expectedval)
+}
+
+func TestFor(t *testing.T) {
+
+	data := []byte(`
+		int main(){
+			int i;
+			for(i=1;i<10;i=i+1){
+				debug i;
+			}
+
+			return 0;
+		}
+		`)
+
+	expectedval := "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9" + EOF_CONSTANT
+
+	assertEquals(t, createFileAndExecute(data, "for"), expectedval)
 }
