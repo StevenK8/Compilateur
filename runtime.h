@@ -25,6 +25,7 @@ int printsub (int n){
 	
 	printsub(r);
 	send d+48;
+	return 0;
 }
 
 int print(int n){

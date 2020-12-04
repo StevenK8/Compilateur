@@ -229,3 +229,22 @@ func TestFor(t *testing.T) {
 
 	assertEquals(t, createFileAndExecute(data, "for"), expectedval)
 }
+
+func TestPrint(t *testing.T) {
+
+	data := []byte(`
+		int main(){
+			int n;
+
+			n = 5;
+
+			print(n);
+
+			return 0;
+		}
+		`)
+
+	expectedval := "5"
+
+	assertEquals(t, createFileAndExecute(data, "print"), expectedval)
+}
