@@ -6,19 +6,19 @@
     <img src="https://img.shields.io/badge/-Silvain Théréné-yellow.svg" />
   </p>
   <p>
-    <img src="https://img.shields.io/badge/Status-on development-success.svg" />
+    <img src="https://img.shields.io/badge/Status-finish-success.svg" />
   </p>
   <p>
     <a href="https://github.com/StevenK8/Compilateur/actions">
-      <img src="https://img.shields.io/badge/Build-Failed-critical.svg" />
+      <img src="https://img.shields.io/badge/Build-passed-success.svg" />
     </a>
-    <img src="https://img.shields.io/badge/Code coverage-0 %25-critical.svg" />
+    <img src="https://img.shields.io/badge/Code coverage-100 %25-success.svg" />
   </p>
   
   <p>
-    <img src="https://img.shields.io/badge/Total tests-6-important.svg" />
-    <img src="https://img.shields.io/badge/Tests passed-0-critical.svg" />
-    <img src="https://img.shields.io/badge/Test quality-0 %25-critical.svg" />
+    <img src="https://img.shields.io/badge/Total tests-10-success.svg" />
+    <img src="https://img.shields.io/badge/Tests passed-10-success.svg" />
+    <img src="https://img.shields.io/badge/Test quality-100 %25-success.svg" />
   </p>
   <p>
     <img src="https://img.shields.io/badge/langage-golang-7fd5ea.svg" />
