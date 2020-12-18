@@ -59,17 +59,8 @@ go build
 ./Compilateur -file='test.txt' -o='test.out'    (Linux)
 ```
 
-## TO DO (For 28 / 11 )
 
-[![N|Solid](https://cdn.discordapp.com/attachments/711219342985134090/779660615543029790/unknown.png)]()
-
-### Tester 
-* [ ] Exécute (compile (Texte)) = Out
-* [ ] Demander précieuse, tout voir le reste du cours.
-* [ ] Sortie brut = Code MSM
-* [X] Diviser en sortie (Test_mult_1.out, Test_mult_2.out, ….)
-
-### Objectif
+### Features
 * [x] Analyseur lexical
 * [x] Atomes (Maths)
 * [x] Expressions (sauf affectation)
@@ -77,10 +68,9 @@ go build
 * [x] Table des symboles
 * [x] Analyse sémantique
 * [x] Conditionelles
-* [ ] Boucles (break)
-* [ ] Fonctions (définitions)
-* [ ] Fonctions (Appels)
-
-* [ ] Pointeur
-* [ ] Tableaux
-* [ ] Runtime ) pour print
+* [x] Boucles (break)
+* [x] Fonctions (définitions)
+* [x] Fonctions (Appels)
+* [x] Pointeur
+* [x] Tableaux
+* [x] Runtime pour print
